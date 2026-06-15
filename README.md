@@ -1,13 +1,13 @@
-# ITR Engenharia - Sistema de Gestão de Amostras
+# ITR Engenharia - Banco de Dados para Gestão de Amostras
 
-Plataforma corporativa web desenvolvida para o gerenciamento centralizado e controle de amostras laboratoriais da ITR Engenharia. O sistema atua como uma camada inteligente de integração (Middleware) entre a interface operacional e o ecossistema de bancos de dados do Airtable, garantindo consistência, performance e segurança no fluxo de ensaios técnicos.
+Modelagem de dados e arquitetura de tabelas desenvolvida para o ecossistema de controle de amostras, clientes e ensaios laboratoriais da ITR Engenharia. Este repositório concentra a inteligência relacional, regras de negócio e restrições de integridade que servirão de fundação para a futura API em Node.js e integração com o Airtable.
 
-##  Características Principais
+## Características da Arquitetura do Banco
 
-* **Arquitetura de Integração Dinâmica:** Consumo centralizado via API do Airtable utilizando Axios, permitindo que campos de seleção, parâmetros de ensaios e dados de clientes sejam sincronizados e renderizados em tempo real na interface sem necessidade de reload.
-* **Operações CRUD Otimizadas:** Controle total sobre o ciclo de vida das Amostras, Clientes e Ensaios, apoiado por um motor de busca indexado em tempo real que acelera a localização de registros laboratoriais.
-* **Segurança e Isolamento de Credenciais:** Arquitetura de servidor que blinda os tokens de autenticação da API no ambiente do back-end utilizando variáveis seguras (`dotenv`), impedindo a exposição de chaves privadas no navegador do cliente (Client-Side).
-* **Stack Modular e Leve:** Interface construída em HTML5 e JavaScript nativo para máxima velocidade, acoplada a um servidor robusto em Node.js com Express para gerenciamento eficiente de rotas HTTP e payloads.
+* **Estrutura Relacional de Produção:** Modelagem focada no ciclo de vida laboratorial, estabelecendo vínculos precisos entre Amostras, Clientes e Ensaios Técnicos para evitar redundância de dados.
+* **Consistência Dinâmica:** Tabelas projetadas estrategicamente para espelhar e validar os campos de seleção dinâmicos provenientes da API do Airtable, garantindo que o banco de dados local opere em perfeita sincronia com o ecossistema em nuvem.
+* **Performance e Indexação para Busca:** Aplicação de índices estruturados (B-Tree) nas colunas de pesquisa frequente para viabilizar consultas e filtros em tempo real de forma instantânea, mitigando gargalos de processamento.
+* **Segurança e Blindagem Nativa:** Implementação de restrições de validação direta no motor do banco, garantindo integridade absoluta nos registros das amostras antes mesmo do dado chegar à camada do servidor.
 
 * © ITR Engenharia — uso interno 
 
