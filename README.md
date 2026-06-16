@@ -12,7 +12,7 @@ Camada de persistência e modelagem relacional em MySQL desenvolvida para o **Si
 ## Tecnologias Utilizadas
 * **SGBD:** MySQL 8.0+
 * **Modelagem:** Relacional (SQL ANSI)
-* **Mecanismo de Armazenamento:** InnoDB (Suporte total a transações ACID)
+* **Mecanismo de Armazenamento:** MySQL Workbench (Suporte total a transações ACID)
 
 ---
 © **ITR Engenharia** — *Uso interno e restrito.*
