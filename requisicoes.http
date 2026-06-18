@@ -1,0 +1,20 @@
+### Testar se o Servidor está vivo
+GET http://localhost:3000/status
+
+###
+
+### Testar o Cadastro de Usuário (Disparar a Procedure)
+POST http://localhost:3000/cadastro
+Content-Type: application/json
+
+{
+  "documento": "25504664405",
+  "tipo_documento": "CPF",
+  "email": "suporte@itrengenharia.com.br",
+  "senha": "123111111111111111111111111111111111111111111111111111111111",
+  "nome_empresa": "ITR Engenharia Testes",
+  "perfil": "Cliente",
+  "airtable_client_id": "recXXXXXXXXXXXXXX",
+  "operador": "SISTEMA_NODE" 
+}  
+

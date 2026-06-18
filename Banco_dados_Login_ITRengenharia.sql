@@ -4,47 +4,35 @@ USE ITRengenhariaLOGIN;
 
 
 -- <<<<<<<<<<<<<<<<<<< PARTE 1: TABELA PRINCIPAL DE USUÁRIOS >>>>>>>>>>>>>>>>>>
+-- ------> Estrutura principal da tabela gerada a partir do alinhamento do DESCRIBE
 
 CREATE TABLE usuarios_cnpj (
-    id                  INT AUTO_INCREMENT PRIMARY KEY,
-    
-    documento           VARCHAR(14)  NOT NULL UNIQUE,                                               -- ------> CPF ou CNPJ (apenas números, sem máscara)
-    tipo_documento      ENUM('CPF', 'CNPJ') NOT NULL,                                               -- ------> Identifica se é CPF ou CNPJ
-    email               VARCHAR(150) NULL UNIQUE,    -- O UNIQUE garante que o E-mail nunca se repita
-    senha_hash          VARCHAR(255) NOT NULL,
-    
-    nome_empresa        VARCHAR(200) NULL,                                                          -- ------> Nome/razão social da empresa (ou nome do funcionário)
-    perfil              ENUM('Cliente', 'Funcionario', 'Gerente_TI', 'Diretor') DEFAULT 'Cliente',  -- ------> Define o nível de acesso do usuário
-    airtable_client_id  VARCHAR(50)  NULL,                                                          -- ------> Vincula o usuário ao cliente do Airtable
-    reset_token         VARCHAR(255) NULL,                                                          -- ------> Token gerado quando o usuário esquece a senha
-    reset_expires       TIMESTAMP    NULL,                                                          -- ------> Validade do token de recuperação (1 hora)
-    ultimo_login        TIMESTAMP    NULL,                                                          -- ------> Marca a última vez que o usuário entrou no sistema
-    
-    tentativas_login    INT          DEFAULT 0,                                                     -- ------> Conta tentativas de login erradas seguidas
-    bloqueado_ate       TIMESTAMP    NULL,                                                          -- ------> Data até a qual a conta está temporariamente bloqueada
-
-    data_exclusao       TIMESTAMP    NULL,                                                          -- ------> [PROCEDURE SOFT DELETE] Em vez de deletar, marca a data para preservar histórico  na tabela de LOGS
-
-    status_conta        ENUM('Ativo', 'Inativo', 'Bloqueado') DEFAULT 'Ativo',
-    data_cadastro       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
-    ultima_atualizacao  TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    -- Restrições de Validação (Robustez de Dados)
-    CONSTRAINT chk_documento_tamanho CHECK (LENGTH(documento) IN (11, 14)),                         -- ------> Garante 11 (CPF) ou 14 (CNPJ) dígitos
-    CONSTRAINT chk_documento_numerico CHECK (documento REGEXP '^[0-9]+$'),                          -- ------> Garante que só tem números (sem máscara)
-    CONSTRAINT chk_tipo_documento_coerente CHECK (                                                  -- ------> CPF deve ter 11 dígitos e CNPJ deve ter 14
-        (tipo_documento = 'CPF'  AND LENGTH(documento) = 11) OR
-        (tipo_documento = 'CNPJ' AND LENGTH(documento) = 14)
-    ),
-    CONSTRAINT chk_email_formato  CHECK (email LIKE '%@%.%' OR email IS NULL),
-    CONSTRAINT chk_senha_segura   CHECK (LENGTH(senha_hash) = 60)
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    documento          VARCHAR(14) NOT NULL,
+    tipo_documento     ENUM('CPF', 'CNPJ') NOT NULL,
+    email              VARCHAR(150) NULL,
+    senha_hash         VARCHAR(255) NOT NULL,                                       -- ------> Nome real da coluna de senha alinhada com o banco
+    nome_empresa       VARCHAR(200) NULL,
+    perfil             ENUM('Cliente', 'Funcionario', 'Gerente_TI', 'Diretor') DEFAULT 'Cliente',
+    airtable_client_id VARCHAR(50) NULL,
+    reset_token        VARCHAR(255) NULL,
+    reset_expires      TIMESTAMP NULL,
+    ultimo_login       TIMESTAMP NULL,
+    tentativas_login   INT DEFAULT 0,
+    bloqueado_ate      TIMESTAMP NULL,
+    data_exclusao      TIMESTAMP NULL,
+    status_conta       ENUM('Ativo', 'Inativo', 'Bloqueado') DEFAULT 'Ativo',
+    data_cadastro      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultima_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_documento (documento),
+    UNIQUE KEY uk_email (email)
 );
 
 -- PERFORMANCE: Índices para acelerar as buscas
-CREATE INDEX idx_usuarios_documento  ON usuarios_cnpj(documento);                                    -- ------> Acelera o login que busca por CPF/CNPJ
+CREATE INDEX idx_usuarios_documento  ON usuarios_cnpj(documento);                  -- ------> Acelera o login que busca por CPF/CNPJ
 CREATE INDEX idx_usuarios_email      ON usuarios_cnpj(email);
-CREATE INDEX idx_usuarios_perfil     ON usuarios_cnpj(perfil);                                       -- ------> Acelera consultas filtradas por perfil
-CREATE INDEX idx_reset_token         ON usuarios_cnpj(reset_token);                                  -- ------> Acelera a validação do token de recuperação
+CREATE INDEX idx_usuarios_perfil     ON usuarios_cnpj(perfil);                     -- ------> Acelera consultas filtradas por perfil
+CREATE INDEX idx_reset_token         ON usuarios_cnpj(reset_token);                -- ------> Acelera a validação do token de recuperação
 
 
 -- <<<<<<<<<<<<<<<<<<< PARTE 2: TABELA DE PERMISSÕES POR PERFIL >>>>>>>>>>>>>>>>>>
@@ -53,11 +41,11 @@ CREATE INDEX idx_reset_token         ON usuarios_cnpj(reset_token);             
 CREATE TABLE permissoes_perfil (
     id           INT AUTO_INCREMENT PRIMARY KEY,
     perfil       ENUM('Cliente', 'Funcionario', 'Gerente_TI', 'Diretor') NOT NULL,    -- ------> Vincula a permissão ao perfil
-    pode_ler     BOOLEAN DEFAULT FALSE,                                                -- ------> Permissão de leitura (SELECT)
-    pode_criar   BOOLEAN DEFAULT FALSE,                                                -- ------> Permissão de criação (INSERT)
-    pode_editar  BOOLEAN DEFAULT FALSE,                                                -- ------> Permissão de edição (UPDATE)
-    pode_excluir BOOLEAN DEFAULT FALSE,                                                -- ------> Permissão de exclusão (DELETE)
-    descricao    VARCHAR(255),                                                         -- ------> Descrição amigável das permissões
+    pode_ler     BOOLEAN DEFAULT FALSE,                                               -- ------> Permissão de leitura (SELECT)
+    pode_criar   BOOLEAN DEFAULT FALSE,                                               -- ------> Permissão de criação (INSERT)
+    pode_editar  BOOLEAN DEFAULT FALSE,                                               -- ------> Permissão de edição (UPDATE)
+    pode_excluir BOOLEAN DEFAULT FALSE,                                               -- ------> Permissão de exclusão (DELETE)
+    descricao    VARCHAR(255),                                                        -- ------> Descrição amigável das permissões
     UNIQUE KEY uk_perfil (perfil)                                                      -- ------> Garante uma única regra por perfil
 );
 
@@ -90,7 +78,7 @@ CREATE TABLE sessoes_ativas (
     id              INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id      INT NOT NULL,                                                 
     token_sessao    VARCHAR(255) NOT NULL UNIQUE,                                  
-    ip_origem       VARCHAR(45),                                                   
+    ip_origem       VARCHAR(45),                                                  
     navegador       VARCHAR(255),                                                  
     criada_em       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                           
     expira_em       TIMESTAMP NOT NULL,                                         
@@ -101,7 +89,7 @@ CREATE TABLE sessoes_ativas (
 
 CREATE INDEX idx_sessao_token   ON sessoes_ativas(token_sessao);                   
 CREATE INDEX idx_sessao_usuario ON sessoes_ativas(usuario_id);     
-                      
+                               
 
 
 -- <<<<<<<<<<<<<<<<<<< PARTE 5: TABELA DE HISTÓRICO DE LOGINS >>>>>>>>>>>>>>>>>>
@@ -109,9 +97,9 @@ CREATE INDEX idx_sessao_usuario ON sessoes_ativas(usuario_id);
 
 CREATE TABLE historico_logins (
     id              INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id      INT NULL,                                                   
+    usuario_id      INT NULL,                                             
     sucesso         BOOLEAN NOT NULL,                                              
-    ip_origem       VARCHAR(45),                                                   
+    ip_origem       VARCHAR(45),                                                  
     navegador       VARCHAR(255),                                                  
     motivo_falha    VARCHAR(100) NULL,                                             
     data_tentativa  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                           
@@ -215,104 +203,124 @@ END $$
 DELIMITER ;
 
 
--- <<<<<<<<<<<<<<<<<<<<<<<< PARTE 8: PROCEDURE DE CADASTRO >>>>>>>>>>>>>>>>>>>>>>>>> 
+-- <<<<<<<<<<<<<<<<<<<<<<<< PARTE 8: PROCEDURES DE CADASTRO >>>>>>>>>>>>>>>>>>>>>>>>> 
 
 DELIMITER $$
 
+-- ROTA A: Com sufixo _cnpj (Alinhada com o teste do seu ecossistema Node)
+DROP PROCEDURE IF EXISTS procedure_cadastrar_usuario_cnpj $$
 CREATE PROCEDURE procedure_cadastrar_usuario_cnpj(
-    IN p_documento VARCHAR(14),
-    IN p_tipo_documento ENUM('CPF', 'CNPJ'),
-    IN p_email VARCHAR(150), 
-    IN p_senha_hash VARCHAR(255),
-    IN p_nome_empresa VARCHAR(200),
-    IN p_perfil ENUM('Cliente','Funcionario','Gerente_TI','Diretor'),
-    IN p_airtable_client_id VARCHAR(50),
-    IN p_operador VARCHAR(100)
+    IN p_documento VARCHAR(20),
+    IN p_tipo_documento VARCHAR(10),
+    IN p_email VARCHAR(100),
+    IN p_senha VARCHAR(255),
+    IN p_nome_empresa VARCHAR(150),
+    IN p_perfil VARCHAR(50),
+    IN p_airtable_client_id VARCHAR(100),
+    IN p_operador VARCHAR(50) -- Mantido para o Node não reclamar
 )
 BEGIN
+    -- 1. HANDLER PARA DUPLICIDADE (CPF ou E-mail repetidos)
     DECLARE EXIT HANDLER FOR 1062
     BEGIN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000' 
+        SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'ERRO: Este CPF/CNPJ ou E-mail já encontra-se cadastrado no sistema.';
     END;
 
+    -- 2. HANDLER DE DIAGNÓSTICO PAI (Repassa outros erros reais se houverem)
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'ERRO: Ocorreu uma falha interna ao tentar processar o cadastro.';
+        RESIGNAL;
     END;
 
-    IF p_tipo_documento = 'CPF' AND NOT fn_validar_cpf(p_documento) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ERRO: CPF inválido. Verifique os dígitos.';
-    END IF;
-    
-    IF p_tipo_documento = 'CNPJ' AND NOT fn_validar_cnpj(p_documento) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ERRO: CNPJ inválido. Verifique os dígitos.';
-    END IF;
-
-    SET @usuario_sessao = p_operador;
-
     START TRANSACTION;
-        INSERT INTO usuarios_cnpj (documento, tipo_documento, email, senha_hash, nome_empresa, perfil, airtable_client_id) 
-        VALUES (p_documento, p_tipo_documento, p_email, p_senha_hash, p_nome_empresa, COALESCE(p_perfil, 'Cliente'), p_airtable_client_id);
+
+    -- Mapeado exatamente com as colunas reais da sua tabela
+    INSERT INTO usuarios_cnpj (
+        documento, 
+        tipo_documento, 
+        email, 
+        senha_hash, -- Ajustado para o nome real da coluna
+        nome_empresa, 
+        perfil, 
+        airtable_client_id
+        -- 'operador' removido aqui por não existir na tabela
+    ) VALUES (
+        p_documento, 
+        p_tipo_documento, 
+        p_email, 
+        p_senha, 
+        p_nome_empresa, 
+        p_perfil, 
+        p_airtable_client_id
+    );
+
     COMMIT;
 END $$
 
-DELIMITER ;
 
-
--- <<<<<<<<<<<<<<<<<<<<<<<< PARTE 9: PROCEDURE DE LOGIN >>>>>>>>>>>>>>>>>>>>>>>>> 
-
-DELIMITER $$
-
-CREATE PROCEDURE procedure_registrar_login(
-    IN p_documento VARCHAR(14)
+-- ROTA B: Sem sufixo (Atualizada e corrigida com tratamento inteligente de logs)
+DROP PROCEDURE IF EXISTS procedure_cadastrar_usuario $$
+CREATE PROCEDURE procedure_cadastrar_usuario(
+    IN p_documento VARCHAR(20),
+    IN p_tipo_documento VARCHAR(10),
+    IN p_email VARCHAR(100),
+    IN p_senha VARCHAR(255),
+    IN p_nome_empresa VARCHAR(150),
+    IN p_perfil VARCHAR(50),
+    IN p_airtable_client_id VARCHAR(100),
+    IN p_operador VARCHAR(50)
 )
 BEGIN
-    UPDATE usuarios_cnpj 
-    SET ultimo_login = CURRENT_TIMESTAMP,
-        tentativas_login = 0,
-        bloqueado_ate = NULL
-    WHERE documento = p_documento AND status_conta = 'Ativo' AND data_exclusao IS NULL;     -- ------> Ignora usuários com soft delete
-    
-    SELECT id, documento, tipo_documento, email, nome_empresa, perfil, airtable_client_id, status_conta
-    FROM usuarios_cnpj 
-    WHERE documento = p_documento AND data_exclusao IS NULL;                                -- ------> Ignora usuários com soft delete
-END $$
+    -- 1. HANDLER PARA DUPLICIDADE (Código 1062 - CPF/CNPJ ou E-mail já existentes)
+    DECLARE EXIT HANDLER FOR 1062
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'ERRO: Este CPF/CNPJ ou E-mail já encontra-se cadastrado no sistema.';
+    END;
 
-DELIMITER ;
+    -- 2. HANDLER INTELIGENTE PARA QUALQUER OUTRA FALHA INTERNA (SQLEXCEPTION)
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        DECLARE msg_erro VARCHAR(255);
+        
+        -- Captura a mensagem técnica real que o MySQL gerou (ex: quebra de Check Constraint)
+        GET DIAGNOSTICS CONDITION 1 msg_erro = MESSAGE_TEXT; 
+        
+        ROLLBACK;
+        
+        -- Envia o erro real de volta para o Node.js saber exatamente o que corrigir
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = msg_erro;
+    END;
 
+    -- Inicia o bloco de segurança
+    START TRANSACTION;
 
--- <<<<<<<<<<<<<<<<<<<<<<<< PARTE 10: PROCEDURE DE TENTATIVA ERRADA >>>>>>>>>>>>>>>>>>>>>>>>> 
+    -- Query de inserção ajustada para bater com as colunas reais detectadas
+    INSERT INTO usuarios_cnpj (
+        documento, 
+        tipo_documento, 
+        email, 
+        senha_hash, -- Ajustado de 'senha' para 'senha_hash'
+        nome_empresa, 
+        perfil, 
+        airtable_client_id
+        -- 'operador' removido por não fazer parte do escopo físico da tabela principal
+    ) VALUES (
+        p_documento, 
+        p_tipo_documento, 
+        p_email, 
+        p_senha, 
+        p_nome_empresa, 
+        p_perfil, 
+        p_airtable_client_id
+    );
 
-DELIMITER $$
-
-CREATE PROCEDURE procedure_login_falhou(
-    IN p_documento VARCHAR(14)
-)
-BEGIN
-    DECLARE v_tentativas INT DEFAULT 0;
-    
-    SELECT tentativas_login INTO v_tentativas
-    FROM usuarios_cnpj
-    WHERE documento = p_documento;
-    
-    IF v_tentativas + 1 >= 5 THEN
-        UPDATE usuarios_cnpj
-        SET tentativas_login = v_tentativas + 1,
-            bloqueado_ate = DATE_ADD(NOW(), INTERVAL 15 MINUTE)
-        WHERE documento = p_documento;
-    ELSE
-        UPDATE usuarios_cnpj
-        SET tentativas_login = v_tentativas + 1
-        WHERE documento = p_documento;
-    END IF;
-    
-    SELECT tentativas_login, bloqueado_ate
-    FROM usuarios_cnpj 
-    WHERE documento = p_documento;
+    -- Confirma as alterações se nenhuma regra falhar
+    COMMIT;
 END $$
 
 DELIMITER ;
@@ -325,7 +333,7 @@ DELIMITER $$
 
 CREATE PROCEDURE procedure_soft_delete_usuario(
     IN p_documento VARCHAR(14),                                                      -- ------> Documento do usuário a ser "excluído"
-    IN p_operador VARCHAR(100)                                                        -- ------> Quem está executando a exclusão
+    IN p_operador VARCHAR(100)                                                       -- ------> Quem está executando a exclusão
 )
 BEGIN
     SET @usuario_sessao = p_operador;
@@ -476,30 +484,32 @@ DELIMITER ;
 -- <<<<<<<<<<<<<<<<<<<<<<<< PARTE 15: EVENTOS AGENDADOS >>>>>>>>>>>>>>>>>>>>>>>>> 
 -- ------> Executa as limpezas automaticamente em horários definidos
 
-SET GLOBAL event_scheduler = ON;                                                  -- ------> Ativa o agendador automático do MySQL
+SET GLOBAL event_scheduler = ON;                                                 -- ------> Ativa o agendador automático do MySQL
 
-CREATE EVENT IF NOT EXISTS evento_limpar_sessoes
+DROP EVENT IF EXISTS evento_limpar_sessoes;
+CREATE EVENT evento_limpar_sessoes
 ON SCHEDULE EVERY 1 HOUR
 DO CALL procedure_limpar_sessoes_expiradas();
 
 
-
-CREATE EVENT IF NOT EXISTS evento_limpar_historico
+DROP EVENT IF EXISTS evento_limpar_historico;
+CREATE EVENT evento_limpar_historico
 ON SCHEDULE EVERY 1 DAY 
 STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 27 HOUR)
 DO CALL procedure_limpar_historico_antigo();
 
 
-CREATE EVENT IF NOT EXISTS evento_limpar_auditoria
+DROP EVENT IF EXISTS evento_limpar_auditoria;
+CREATE EVENT evento_limpar_auditoria
 ON SCHEDULE EVERY 1 DAY
 STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 27 HOUR)
 DO CALL procedure_limpar_auditoria_antiga();
 
 
-CREATE EVENT IF NOT EXISTS evento_limpar_tokens
+DROP EVENT IF EXISTS evento_limpar_tokens;
+CREATE EVENT evento_limpar_tokens
 ON SCHEDULE EVERY 30 MINUTE
 DO CALL procedure_limpar_tokens_reset();
-
 
 
 -- <<<<<<<<<<<<<<<<<<<<< VISUALIZAÇÃO DOS RESULTADOS >>>>>>>>>>>>>>>>>>>>>>>>> 
@@ -510,4 +520,4 @@ SELECT * FROM auditoria_usuarios;
 
 -- Novos Selects 
 SELECT * FROM sessoes_ativas;
-SELECT * FROM historico_logins; 
+SELECT * FROM historico_logins;

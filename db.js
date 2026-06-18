@@ -8,17 +8,17 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME,
     port: process.env.DB_PORT || 3306,
     waitForConnections: true,
-    connectionLimit: 10,
+    connectionLimit: 10, 
     queueLimit: 0
-});
+}); 
 
 pool.getConnection()
     .then(conn => {
-        console.log('Sucesso: Conectado ao banco ITRengenhariaLOGIN!');
-        conn.release();
+        console.log('Sucesso: Conectado ao banco ITRengenhariaLOGIN! ------> Nome do banco: ' + process.env.DB_NAME);
+        conn.release(); 
     })
     .catch(err => {
-        console.error('Erro crítico ao conectar no MySQL:', err.message);
+        console.error('Erro crítico ao conectar no MySQl:', err.message);
     });
 
-module.exports = pool;
+module.exports = pool;  
