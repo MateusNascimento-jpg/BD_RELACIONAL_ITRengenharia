@@ -1,6 +1,6 @@
 # ITR Engenharia — Banco de Dados para Gestão de Amostras
 
-Camada de persistência e modelagem relacional em MySQL desenvolvida para o **Sistema de Gestão de Amostras Laboratoriais** da ITR Engenharia. Este repositório concentra a inteligência de dados, tabelas estruturadas e restrições de integridade que servem de fundação para a futura API (Node.js/Express) e integração com o Airtable.
+Camada de persistência e modelagem relacional em MySQL desenvolvida para o **Sistema de Gestão de Amostras Laboratoriais** da Empresa ITR Engenharia. Este repositório concentra a inteligência de dados, tabelas estruturadas e restrições de integridade que servem de fundação para a futura API (Node.js/Express) e integração com o Airtable.
 
 ## Características da Engenharia do Banco
 
@@ -10,8 +10,8 @@ Camada de persistência e modelagem relacional em MySQL desenvolvida para o **Si
 * **Validação Nativa no Motor do Banco:** Uso de restrições de validação rígidas (`Constraints`) que blindam o banco de dados contra payloads malformados antes mesmo que a informação chegue à camada de aplicação.
 
 ## Tecnologias Utilizadas
-* **SGBD:** MySQL 8.0+
-* **Modelagem:** Relacional (SQL ANSI)
+* **SGBD:** MySQL 8.0+ CE
+* **Modelagem:** Relacional (SQL ANSI) 
 
 ---
 © **ITR Engenharia** — *Uso interno e restrito.*
