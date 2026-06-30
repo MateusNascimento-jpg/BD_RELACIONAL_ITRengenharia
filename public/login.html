@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal do Cliente — ITR Engenharia</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css">
+<style>
+  :root{
+    --bg:#43484d;
+    --bg-deep:#26282b;
+    --card:rgba(38,41,45,0.72);
+    --line:rgba(150,170,195,0.30);
+    --line-soft:rgba(150,170,195,0.16);
+    --azul:#3d7be0;
+    --azul-claro:#7ba2e6;
+    --azul-link:#8fb6ec;
+    --txt:#f3f5f8;
+    --txt-2:#c9cdd4;
+    --txt-3:#8b97a8;
+    --txt-4:#727d8a;
+    --field:rgba(18,20,23,0.55);
+    --erro-bg:rgba(180,50,50,0.16);
+    --erro-bd:rgba(220,90,90,0.40);
+    --erro-tx:#f3a4a4;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    font-family:'Segoe UI', Arial, Helvetica, sans-serif;
+    background:var(--bg);
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:1.5rem; position:relative; overflow:hidden;
+    color:var(--txt);
+  }
+
+  /* ===== Fundo interativo (malha técnica + sondagem que segue o mouse) ===== */
+  #campo{ position:fixed; inset:0; z-index:0; }
+  /* halo de luz que segue o cursor */
+  #halo{
+    position:fixed; z-index:1; width:520px; height:520px; border-radius:50%;
+    left:0; top:0; transform:translate(-50%,-50%);
+    background:radial-gradient(circle at center,
+        rgba(61,123,224,0.16) 0%,
+        rgba(61,123,224,0.07) 35%,
+        rgba(61,123,224,0.0) 70%);
+    pointer-events:none; transition:opacity .6s ease; opacity:0;
+  }
+  /* vinheta para dar profundidade ao fundo */
+  #vinheta{
+    position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:radial-gradient(ellipse at 50% 42%,
+        rgba(43,46,49,0) 0%,
+        rgba(38,40,43,0.35) 60%,
+        rgba(30,32,34,0.78) 100%);
+  }
+
+  /* ===== Cartão de vidro ===== */
+  .card{
+    position:relative; z-index:3;
+    width:100%; max-width:372px;
+    background:var(--card);
+    border:0.5px solid var(--line);
+    border-radius:18px;
+    padding:2.6rem 2rem 2.1rem;
+    backdrop-filter:blur(14px) saturate(115%);
+    -webkit-backdrop-filter:blur(14px) saturate(115%);
+    box-shadow:0 24px 60px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.05);
+    opacity:0; transform:translateY(14px) scale(.99);
+    animation:entra .7s cubic-bezier(.22,.61,.36,1) .15s forwards;
+  }
+  @keyframes entra{ to{ opacity:1; transform:none; } }
+
+  .logo{ display:flex; justify-content:center; margin-bottom:6px; }
+  .logo img{ width:172px; height:auto; filter:drop-shadow(0 2px 10px rgba(0,0,0,.35)); }
+
+  /* selo/etiqueta técnica acima do título */
+  .selo{
+    display:flex; align-items:center; gap:8px; justify-content:center;
+    margin:18px 0 4px;
+  }
+  .selo .traco{ height:0.5px; width:34px; background:var(--line); }
+  .selo span{
+    color:var(--txt-3); font-size:10.5px; letter-spacing:2.5px; text-transform:uppercase;
+  }
+  .subtitulo{
+    color:var(--txt-2); font-size:12.5px; text-align:center; letter-spacing:.4px;
+    margin:0 0 24px;
+  }
+
+  label{ display:block; color:var(--txt-3); font-size:11px; letter-spacing:.4px; margin:0 0 6px; font-weight:500; }
+
+  .campo-input{
+    display:flex; align-items:center;
+    background:var(--field);
+    border:0.5px solid var(--line-soft);
+    border-radius:10px; padding:0 13px; margin-bottom:15px; height:46px;
+    transition:border-color .25s, box-shadow .25s, background .25s;
+  }
+  .campo-input:focus-within{
+    border-color:rgba(123,162,230,0.65);
+    box-shadow:0 0 0 3px rgba(61,123,224,0.16);
+    background:rgba(18,20,23,0.7);
+  }
+  .campo-input i.lead{ color:var(--azul-claro); font-size:19px; margin-right:9px; transition:transform .25s; }
+  .campo-input:focus-within i.lead{ transform:scale(1.12); }
+  .campo-input input{
+    flex:1; background:transparent; border:none; outline:none;
+    color:var(--txt); font-size:14.5px; font-family:inherit; letter-spacing:.2px;
+  }
+  .campo-input input::placeholder{ color:var(--txt-4); }
+  .campo-input .olho{ color:var(--txt-4); cursor:pointer; font-size:18px; transition:color .2s; }
+  .campo-input .olho:hover{ color:var(--azul-claro); }
+
+  .linha-senha{ text-align:right; margin:-4px 0 22px; }
+  .linha-senha a{ color:var(--azul-link); font-size:12px; text-decoration:none; transition:color .2s; }
+  .linha-senha a:hover{ color:#b9d2f5; text-decoration:underline; }
+
+  .botao{
+    position:relative; overflow:hidden;
+    width:100%; background:var(--azul); color:#fff; text-align:center;
+    height:48px; border:none; border-radius:10px;
+    font-weight:600; font-size:15px; letter-spacing:.3px; cursor:pointer;
+    font-family:inherit;
+    transition:transform .15s, box-shadow .25s, background .2s;
+    box-shadow:0 8px 22px rgba(61,123,224,0.32);
+  }
+  .botao:hover{ background:#356fce; transform:translateY(-1px); box-shadow:0 12px 28px rgba(61,123,224,0.42); }
+  .botao:active{ transform:translateY(0) scale(.985); }
+  .botao:disabled{ opacity:.6; cursor:default; transform:none; box-shadow:none; }
+  .botao .lustro{
+    position:absolute; top:0; left:-130%; width:60%; height:100%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,0.28), transparent);
+    transform:skewX(-18deg);
+  }
+  .botao:hover .lustro{ animation:brilho .9s ease; }
+  @keyframes brilho{ from{ left:-130%; } to{ left:130%; } }
+
+  .rodape{ text-align:center; color:var(--txt-4); font-size:12px; margin:20px 0 0; line-height:1.6; }
+  .rodape a{ color:var(--azul-link); text-decoration:none; font-weight:500; }
+  .rodape a:hover{ text-decoration:underline; }
+
+  .erro{
+    background:var(--erro-bg); border:0.5px solid var(--erro-bd);
+    color:var(--erro-tx); font-size:12.5px; border-radius:10px; padding:11px 13px;
+    margin-bottom:15px; display:none; align-items:center; gap:8px;
+  }
+  .erro i{ font-size:16px; flex-shrink:0; }
+
+  .marca-rodape{
+    position:fixed; bottom:16px; left:0; right:0; z-index:2; text-align:center;
+    color:var(--txt-4); font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase;
+    pointer-events:none;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card{ animation:none; opacity:1; transform:none; }
+    .botao:hover .lustro{ animation:none; }
+    #halo{ display:none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="campo" aria-hidden="true"></canvas>
+<div id="halo" aria-hidden="true"></div>
+<div id="vinheta" aria-hidden="true"></div>
+
+<div class="card">
+  <div class="logo">
+    <img src="https://itr.eng.br/wp-content/uploads/2023/05/vetorizada-branca.png" alt="ITR Engenharia">
+  </div>
+
+  <div class="selo">
+    <span class="traco"></span><span>Portal do cliente</span><span class="traco"></span>
+  </div>
+  <p class="subtitulo">Acesse seus relatórios de ensaio</p>
+
+  <div id="erro" class="erro"><i class="ti ti-alert-triangle" aria-hidden="true"></i><span id="erroTxt"></span></div>
+
+  <label for="documento">CNPJ</label>
+  <div class="campo-input">
+    <i class="ti ti-id lead" aria-hidden="true"></i>
+    <input id="documento" type="text" placeholder="Digite seu CNPJ" autocomplete="username" inputmode="numeric">
+  </div>
+
+  <label for="senha">Senha</label>
+  <div class="campo-input">
+    <i class="ti ti-lock lead" aria-hidden="true"></i>
+    <input id="senha" type="password" placeholder="••••••••" autocomplete="current-password">
+    <i class="ti ti-eye olho" id="olho" role="button" tabindex="0" aria-label="Mostrar ou ocultar senha"></i>
+  </div>
+
+  <div class="linha-senha"><a href="esqueci-senha.html">Esqueci minha senha</a></div>
+
+  <button class="botao" id="btnAcessar"><span class="lustro"></span>Acessar portal</button>
+
+  <p class="rodape">Ainda não tem acesso? <a href="cadastro.html">Criar conta</a><br>Em caso de dúvidas, fale com a ITR Engenharia.</p>
+</div>
+
+<div class="marca-rodape">ITR Engenharia · Laboratório de Ensaios Geotécnicos</div>
+
+<script>
+  /* ===== Malha técnica viva: grade + nós que acendem perto do cursor ===== */
+  (function(){
+    var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var cv = document.getElementById('campo');
+    var ctx = cv.getContext('2d');
+    var W, H, dpr, passo = 40;
+    var mouse = { x:-9999, y:-9999, on:false };
+    var nos = [];
+
+    function dim(){
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth; H = window.innerHeight;
+      cv.width = W * dpr; cv.height = H * dpr;
+      cv.style.width = W+'px'; cv.style.height = H+'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      construirNos();
+    }
+    function construirNos(){
+      nos = [];
+      for(var x = passo; x < W; x += passo){
+        for(var y = passo; y < H; y += passo){
+          /* só guarda uma fração dos cruzamentos como "nós" acendíveis, p/ leveza */
+          if((x/passo + y/passo) % 3 === 0) nos.push({ x:x, y:y });
+        }
+      }
+    }
+
+    function desenha(){
+      ctx.clearRect(0,0,W,H);
+
+      /* grade base */
+      ctx.lineWidth = 0.5;
+      for(var x=0; x<=W; x+=passo){
+        ctx.strokeStyle = (x % (passo*5) === 0) ? 'rgba(120,140,165,0.16)' : 'rgba(110,128,150,0.07)';
+        ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
+      }
+      for(var y=0; y<=H; y+=passo){
+        ctx.strokeStyle = (y % (passo*5) === 0) ? 'rgba(120,140,165,0.16)' : 'rgba(110,128,150,0.07)';
+        ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+      }
+
+      /* nós que reagem ao mouse (sondagem) */
+      var raio = 170;
+      for(var i=0;i<nos.length;i++){
+        var n = nos[i];
+        var d = Math.hypot(n.x - mouse.x, n.y - mouse.y);
+        var perto = mouse.on && d < raio;
+        var f = perto ? (1 - d/raio) : 0;
+
+        /* ponto */
+        var base = 0.10;
+        var alpha = base + f*0.85;
+        var r = 1 + f*2.4;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, r, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba('+Math.round(123+ f*40)+','+Math.round(162+f*30)+',230,'+alpha+')';
+        ctx.fill();
+
+        /* linha de ligação até o cursor quando bem perto */
+        if(perto && f > 0.35){
+          ctx.beginPath();
+          ctx.moveTo(n.x, n.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = 'rgba(61,123,224,'+(f*0.22)+')';
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+      requestAnimationFrame(desenha);
+    }
+
+    function moveHalo(x,y){
+      var halo = document.getElementById('halo');
+      halo.style.left = x+'px'; halo.style.top = y+'px'; halo.style.opacity = '1';
+    }
+
+    window.addEventListener('mousemove', function(e){
+      mouse.x = e.clientX; mouse.y = e.clientY; mouse.on = true;
+      moveHalo(e.clientX, e.clientY);
+    });
+    window.addEventListener('mouseleave', function(){ mouse.on = false; mouse.x = -9999; mouse.y = -9999; });
+    window.addEventListener('resize', dim);
+
+    dim();
+    if(!prefersReduce){ desenha(); }
+    else {
+      /* sem animação: desenha a grade uma vez */
+      ctx.clearRect(0,0,W,H);
+      ctx.lineWidth = 0.5;
+      for(var x=0;x<=W;x+=passo){ ctx.strokeStyle=(x%(passo*5)===0)?'rgba(120,140,165,0.16)':'rgba(110,128,150,0.07)'; ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+      for(var y=0;y<=H;y+=passo){ ctx.strokeStyle=(y%(passo*5)===0)?'rgba(120,140,165,0.16)':'rgba(110,128,150,0.07)'; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    }
+  })();
+
+  /* ===== Mostrar / ocultar senha ===== */
+  var olho = document.getElementById('olho');
+  function toggleSenha(){
+    var s = document.getElementById('senha');
+    if(s.type === 'password'){ s.type='text'; olho.classList.replace('ti-eye','ti-eye-off'); }
+    else { s.type='password'; olho.classList.replace('ti-eye-off','ti-eye'); }
+  }
+  olho.addEventListener('click', toggleSenha);
+  olho.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggleSenha(); } });
+
+  /* ===== Login (mesma lógica de antes: POST /login) ===== */
+  var btn = document.getElementById('btnAcessar');
+  var erroBox = document.getElementById('erro');
+  var erroTxt = document.getElementById('erroTxt');
+
+  function mostrarErro(msg){ erroTxt.textContent = msg; erroBox.style.display='flex'; }
+
+  async function acessar(){
+    var documento = document.getElementById('documento').value.trim();
+    var senha = document.getElementById('senha').value;
+    erroBox.style.display='none';
+
+    if(!documento || !senha){ mostrarErro('Informe seu CNPJ e a senha.'); return; }
+
+    btn.disabled=true; btn.textContent='Acessando...';
+    try{
+      var resp = await fetch('/login',{
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body:JSON.stringify({ documento:documento, senha:senha })
+      });
+      var dados = await resp.json();
+      if(dados.sucesso && dados.token){
+        localStorage.setItem('token', dados.token);
+        window.location.href='portal.html';
+      } else {
+        mostrarErro(dados.erro || 'Não foi possível entrar. Verifique seus dados.');
+        btn.disabled=false; btn.textContent='Acessar portal';
+      }
+    }catch(e){
+      mostrarErro('Erro de conexão com o servidor. Tente novamente.');
+      btn.disabled=false; btn.textContent='Acessar portal';
+    }
+  }
+
+  btn.addEventListener('click', acessar);
+  document.getElementById('senha').addEventListener('keydown', function(e){ if(e.key==='Enter') acessar(); });
+  document.getElementById('documento').addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('senha').focus(); });
+</script>
+</body>
+</html>

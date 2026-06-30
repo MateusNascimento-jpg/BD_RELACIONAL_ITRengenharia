@@ -1,17 +1,14 @@
-DROP DATABASE IF EXISTS ITRengenhariaLOGIN; 
+DROP DATABASE IF EXISTS ITRengenhariaLOGIN;
 CREATE DATABASE ITRengenhariaLOGIN;
 USE ITRengenhariaLOGIN;
 
-
--- <<<<<<<<<<<<<<<<<<< PARTE 1: TABELA PRINCIPAL DE USUÁRIOS >>>>>>>>>>>>>>>>>>
--- ------> Estrutura principal da tabela gerada a partir do alinhamento do DESCRIBE
-
+-- PARTE 1: TABELA PRINCIPAL DE USUÁRIOS
 CREATE TABLE usuarios_cnpj (
     id                 INT AUTO_INCREMENT PRIMARY KEY,
     documento          VARCHAR(14) NOT NULL,
     tipo_documento     ENUM('CPF', 'CNPJ') NOT NULL,
     email              VARCHAR(150) NULL,
-    senha_hash         VARCHAR(255) NOT NULL,                                       -- ------> Nome real da coluna de senha alinhada com o banco
+    senha_hash         VARCHAR(255) NOT NULL,
     nome_empresa       VARCHAR(200) NULL,
     perfil             ENUM('Cliente', 'Funcionario', 'Gerente_TI', 'Diretor') DEFAULT 'Cliente',
     airtable_client_id VARCHAR(50) NULL,
@@ -28,496 +25,224 @@ CREATE TABLE usuarios_cnpj (
     UNIQUE KEY uk_email (email)
 );
 
--- PERFORMANCE: Índices para acelerar as buscas
-CREATE INDEX idx_usuarios_documento  ON usuarios_cnpj(documento);                  -- ------> Acelera o login que busca por CPF/CNPJ
+CREATE INDEX idx_usuarios_documento  ON usuarios_cnpj(documento);
 CREATE INDEX idx_usuarios_email      ON usuarios_cnpj(email);
-CREATE INDEX idx_usuarios_perfil     ON usuarios_cnpj(perfil);                     -- ------> Acelera consultas filtradas por perfil
-CREATE INDEX idx_reset_token         ON usuarios_cnpj(reset_token);                -- ------> Acelera a validação do token de recuperação
+CREATE INDEX idx_usuarios_perfil     ON usuarios_cnpj(perfil);
+CREATE INDEX idx_reset_token         ON usuarios_cnpj(reset_token);
 
-
--- <<<<<<<<<<<<<<<<<<< PARTE 2: TABELA DE PERMISSÕES POR PERFIL >>>>>>>>>>>>>>>>>>
--- ------> Tabela que define o que cada perfil pode fazer no sistema
-
+-- PARTE 2: PERMISSÕES POR PERFIL
 CREATE TABLE permissoes_perfil (
     id           INT AUTO_INCREMENT PRIMARY KEY,
-    perfil       ENUM('Cliente', 'Funcionario', 'Gerente_TI', 'Diretor') NOT NULL,    -- ------> Vincula a permissão ao perfil
-    pode_ler     BOOLEAN DEFAULT FALSE,                                               -- ------> Permissão de leitura (SELECT)
-    pode_criar   BOOLEAN DEFAULT FALSE,                                               -- ------> Permissão de criação (INSERT)
-    pode_editar  BOOLEAN DEFAULT FALSE,                                               -- ------> Permissão de edição (UPDATE)
-    pode_excluir BOOLEAN DEFAULT FALSE,                                               -- ------> Permissão de exclusão (DELETE)
-    descricao    VARCHAR(255),                                                        -- ------> Descrição amigável das permissões
-    UNIQUE KEY uk_perfil (perfil)                                                      -- ------> Garante uma única regra por perfil
+    perfil       ENUM('Cliente', 'Funcionario', 'Gerente_TI', 'Diretor') NOT NULL,
+    pode_ler     BOOLEAN DEFAULT FALSE,
+    pode_criar   BOOLEAN DEFAULT FALSE,
+    pode_editar  BOOLEAN DEFAULT FALSE,
+    pode_excluir BOOLEAN DEFAULT FALSE,
+    descricao    VARCHAR(255),
+    UNIQUE KEY uk_perfil (perfil)
 );
 
--- ------> Inserção das permissões pré-definidas de cada perfil
 INSERT INTO permissoes_perfil (perfil, pode_ler, pode_criar, pode_editar, pode_excluir, descricao) VALUES
 ('Cliente',     TRUE,  FALSE, FALSE, FALSE, 'Visualiza apenas seus próprios relatórios'),
 ('Funcionario', TRUE,  TRUE,  TRUE,  FALSE, 'Pode ler, criar e editar — não pode excluir'),
 ('Gerente_TI',  TRUE,  TRUE,  TRUE,  TRUE,  'Acesso total ao sistema'),
 ('Diretor',     TRUE,  TRUE,  TRUE,  TRUE,  'Acesso total ao sistema');
 
-
--- <<<<<<<<<<<<<<<<<<<<<< PARTE 3: TABELA DE AUDITORIA (LOG PADRONIZADO) >>>>>>>>>>>>>>>>>>>>
-
+-- PARTE 3: AUDITORIA
 CREATE TABLE auditoria_usuarios (
     `ID da Auditoria`     INT AUTO_INCREMENT PRIMARY KEY,
     `ID do Usuário`       INT,
-    `Documento Afetado`   VARCHAR(14),                            -- ------> Documento (CPF/CNPJ) do usuário afetado pela ação
-    `Tipo Documento`      VARCHAR(10),                            -- ------> Indica se o documento é CPF ou CNPJ
-    `Perfil do Usuário`   VARCHAR(50),                            -- ------> Registra qual perfil estava sendo afetado pela ação
-    `Ação Realizada`      VARCHAR(100),            
-    `Operador do Sistema` VARCHAR(100), -- Guardará o e-mail do usuário real capturado pelo Node.js
+    `Documento Afetado`   VARCHAR(14),
+    `Tipo Documento`      VARCHAR(10),
+    `Perfil do Usuário`   VARCHAR(50),
+    `Ação Realizada`      VARCHAR(100),
+    `Operador do Sistema` VARCHAR(100),
     `Data e Hora da Ação` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
--- <<<<<<<<<<<<<<<<<<< PARTE 4: TABELA DE SESSÕES ATIVAS >>>>>>>>>>>>>>>>>>
--- ------> [[[[[NOVA TABELA]]]] Guarda todas as sessões/tokens ativos para permitir logout forçado e revogar acessos comprometidos
-
+-- PARTE 4: SESSÕES ATIVAS
 CREATE TABLE sessoes_ativas (
     id              INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id      INT NOT NULL,                                                 
-    token_sessao    VARCHAR(255) NOT NULL UNIQUE,                                  
-    ip_origem       VARCHAR(45),                                                  
-    navegador       VARCHAR(255),                                                  
-    criada_em       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                           
-    expira_em       TIMESTAMP NOT NULL,                                         
-    revogada        BOOLEAN DEFAULT FALSE,                                        
-     
-    FOREIGN KEY (usuario_id) REFERENCES usuarios_cnpj(id) ON DELETE CASCADE  
-);  
-
-CREATE INDEX idx_sessao_token   ON sessoes_ativas(token_sessao);                   
-CREATE INDEX idx_sessao_usuario ON sessoes_ativas(usuario_id);     
-                               
-
-
--- <<<<<<<<<<<<<<<<<<< PARTE 5: TABELA DE HISTÓRICO DE LOGINS >>>>>>>>>>>>>>>>>>
--- ------> [[[[NOVA TABELA]]]] Registra cada tentativa de login (sucesso ou falha) para auditoria de segurança e detecção de acessos suspeitos
-
-CREATE TABLE historico_logins (
-    id              INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id      INT NULL,                                             
-    sucesso         BOOLEAN NOT NULL,                                              
-    ip_origem       VARCHAR(45),                                                  
-    navegador       VARCHAR(255),                                                  
-    motivo_falha    VARCHAR(100) NULL,                                             
-    data_tentativa  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                           
-    
-    FOREIGN KEY (usuario_id) REFERENCES usuarios_cnpj(id) ON DELETE SET NULL    
+    usuario_id      INT NOT NULL,
+    token_sessao    VARCHAR(255) NOT NULL UNIQUE,
+    ip_origem       VARCHAR(45),
+    navegador       VARCHAR(255),
+    criada_em       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expira_em       TIMESTAMP NOT NULL,
+    revogada        BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios_cnpj(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_historico_usuario   ON historico_logins(usuario_id);              -- ------> Acelera busca de histórico por usuário         
-CREATE INDEX idx_historico_data      ON historico_logins(data_tentativa);          -- ------> Acelera filtros por período
+CREATE INDEX idx_sessao_token   ON sessoes_ativas(token_sessao);
+CREATE INDEX idx_sessao_usuario ON sessoes_ativas(usuario_id);
 
+-- PARTE 5: HISTÓRICO DE LOGINS
+CREATE TABLE historico_logins (
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id      INT NULL,
+    sucesso         BOOLEAN NOT NULL,
+    ip_origem       VARCHAR(45),
+    navegador       VARCHAR(255),
+    motivo_falha    VARCHAR(100) NULL,
+    data_tentativa  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios_cnpj(id) ON DELETE SET NULL
+);
 
--- <<<<<<<<<<<<<<<<<<<<<<<< PARTE 6: FUNÇÃO PARA VALIDAR CPF >>>>>>>>>>>>>>>>>>>>>>>>>
--- ------> Função que valida matematicamente os dígitos verificadores do CPF
+CREATE INDEX idx_historico_usuario ON historico_logins(usuario_id);
+CREATE INDEX idx_historico_data    ON historico_logins(data_tentativa);
 
+-- PARTE 6: FUNÇÃO VALIDAR CPF
 DELIMITER $$
-
-CREATE FUNCTION fn_validar_cpf(p_cpf VARCHAR(11)) 
-RETURNS BOOLEAN
-DETERMINISTIC
+CREATE FUNCTION fn_validar_cpf(p_cpf VARCHAR(11))
+RETURNS BOOLEAN DETERMINISTIC
 BEGIN
-    DECLARE i INT DEFAULT 1;
-    DECLARE soma INT DEFAULT 0;
-    DECLARE digito1 INT DEFAULT 0;
-    DECLARE digito2 INT DEFAULT 0;
-    DECLARE resto INT DEFAULT 0;
-    
+    DECLARE i INT DEFAULT 1; DECLARE soma INT DEFAULT 0;
+    DECLARE digito1 INT DEFAULT 0; DECLARE digito2 INT DEFAULT 0; DECLARE resto INT DEFAULT 0;
     IF LENGTH(p_cpf) <> 11 THEN RETURN FALSE; END IF;
     IF p_cpf REGEXP '^([0-9])\\1{10}$' THEN RETURN FALSE; END IF;
-    
-    WHILE i <= 9 DO
-        SET soma = soma + (CAST(SUBSTRING(p_cpf, i, 1) AS UNSIGNED) * (11 - i));
-        SET i = i + 1;
-    END WHILE;
-    SET resto = soma % 11;
-    SET digito1 = IF(resto < 2, 0, 11 - resto);
-    
-    IF digito1 <> CAST(SUBSTRING(p_cpf, 10, 1) AS UNSIGNED) THEN RETURN FALSE; END IF;
-    
-    SET soma = 0;
-    SET i = 1;
-    WHILE i <= 10 DO
-        SET soma = soma + (CAST(SUBSTRING(p_cpf, i, 1) AS UNSIGNED) * (12 - i));
-        SET i = i + 1;
-    END WHILE;
-    SET resto = soma % 11;
-    SET digito2 = IF(resto < 2, 0, 11 - resto);
-    
-    IF digito2 <> CAST(SUBSTRING(p_cpf, 11, 1) AS UNSIGNED) THEN RETURN FALSE; END IF;
-    
+    WHILE i <= 9 DO SET soma = soma + (CAST(SUBSTRING(p_cpf,i,1) AS UNSIGNED) * (11-i)); SET i=i+1; END WHILE;
+    SET resto=soma%11; SET digito1=IF(resto<2,0,11-resto);
+    IF digito1 <> CAST(SUBSTRING(p_cpf,10,1) AS UNSIGNED) THEN RETURN FALSE; END IF;
+    SET soma=0; SET i=1;
+    WHILE i <= 10 DO SET soma=soma+(CAST(SUBSTRING(p_cpf,i,1) AS UNSIGNED)*(12-i)); SET i=i+1; END WHILE;
+    SET resto=soma%11; SET digito2=IF(resto<2,0,11-resto);
+    IF digito2 <> CAST(SUBSTRING(p_cpf,11,1) AS UNSIGNED) THEN RETURN FALSE; END IF;
     RETURN TRUE;
 END $$
-
 DELIMITER ;
 
-
--- <<<<<<<<<<<<<<<<<<<<<<<< PARTE 7: FUNÇÃO PARA VALIDAR CNPJ >>>>>>>>>>>>>>>>>>>>>>>>>
--- ------> Função que valida matematicamente os dígitos verificadores do CNPJ
-
+-- PARTE 7: FUNÇÃO VALIDAR CNPJ
 DELIMITER $$
-
-CREATE FUNCTION fn_validar_cnpj(p_cnpj VARCHAR(14)) 
-RETURNS BOOLEAN
-DETERMINISTIC
+CREATE FUNCTION fn_validar_cnpj(p_cnpj VARCHAR(14))
+RETURNS BOOLEAN DETERMINISTIC
 BEGIN
-    DECLARE i INT DEFAULT 1;
-    DECLARE soma INT DEFAULT 0;
-    DECLARE peso INT DEFAULT 5;
-    DECLARE digito1 INT DEFAULT 0;
-    DECLARE digito2 INT DEFAULT 0;
-    DECLARE resto INT DEFAULT 0;
-    
+    DECLARE i INT DEFAULT 1; DECLARE soma INT DEFAULT 0; DECLARE peso INT DEFAULT 5;
+    DECLARE digito1 INT DEFAULT 0; DECLARE digito2 INT DEFAULT 0; DECLARE resto INT DEFAULT 0;
     IF LENGTH(p_cnpj) <> 14 THEN RETURN FALSE; END IF;
     IF p_cnpj REGEXP '^([0-9])\\1{13}$' THEN RETURN FALSE; END IF;
-    
-    WHILE i <= 12 DO
-        SET soma = soma + (CAST(SUBSTRING(p_cnpj, i, 1) AS UNSIGNED) * peso);
-        SET peso = IF(peso = 2, 9, peso - 1);
-        SET i = i + 1;
-    END WHILE;
-    SET resto = soma % 11;
-    SET digito1 = IF(resto < 2, 0, 11 - resto);
-    
-    IF digito1 <> CAST(SUBSTRING(p_cnpj, 13, 1) AS UNSIGNED) THEN RETURN FALSE; END IF;
-    
-    SET soma = 0;
-    SET peso = 6;
-    SET i = 1;
-    WHILE i <= 13 DO
-        SET soma = soma + (CAST(SUBSTRING(p_cnpj, i, 1) AS UNSIGNED) * peso);
-        SET peso = IF(peso = 2, 9, peso - 1);
-        SET i = i + 1;
-    END WHILE;
-    SET resto = soma % 11;
-    SET digito2 = IF(resto < 2, 0, 11 - resto);
-    
-    IF digito2 <> CAST(SUBSTRING(p_cnpj, 14, 1) AS UNSIGNED) THEN RETURN FALSE; END IF;
-    
+    WHILE i <= 12 DO SET soma=soma+(CAST(SUBSTRING(p_cnpj,i,1) AS UNSIGNED)*peso); SET peso=IF(peso=2,9,peso-1); SET i=i+1; END WHILE;
+    SET resto=soma%11; SET digito1=IF(resto<2,0,11-resto);
+    IF digito1 <> CAST(SUBSTRING(p_cnpj,13,1) AS UNSIGNED) THEN RETURN FALSE; END IF;
+    SET soma=0; SET peso=6; SET i=1;
+    WHILE i <= 13 DO SET soma=soma+(CAST(SUBSTRING(p_cnpj,i,1) AS UNSIGNED)*peso); SET peso=IF(peso=2,9,peso-1); SET i=i+1; END WHILE;
+    SET resto=soma%11; SET digito2=IF(resto<2,0,11-resto);
+    IF digito2 <> CAST(SUBSTRING(p_cnpj,14,1) AS UNSIGNED) THEN RETURN FALSE; END IF;
     RETURN TRUE;
 END $$
-
 DELIMITER ;
 
-
--- <<<<<<<<<<<<<<<<<<<<<<<< PARTE 8: PROCEDURES DE CADASTRO >>>>>>>>>>>>>>>>>>>>>>>>> 
-
+-- PARTE 8: PROCEDURES DE CADASTRO
 DELIMITER $$
-
--- ROTA A: Com sufixo _cnpj (Alinhada com o teste do seu ecossistema Node)
 DROP PROCEDURE IF EXISTS procedure_cadastrar_usuario_cnpj $$
 CREATE PROCEDURE procedure_cadastrar_usuario_cnpj(
-    IN p_documento VARCHAR(20),
-    IN p_tipo_documento VARCHAR(10),
-    IN p_email VARCHAR(100),
-    IN p_senha VARCHAR(255),
-    IN p_nome_empresa VARCHAR(150),
-    IN p_perfil VARCHAR(50),
-    IN p_airtable_client_id VARCHAR(100),
-    IN p_operador VARCHAR(50) -- Mantido para o Node não reclamar
-)
+    IN p_documento VARCHAR(20), IN p_tipo_documento VARCHAR(10),
+    IN p_email VARCHAR(100), IN p_senha VARCHAR(255),
+    IN p_nome_empresa VARCHAR(150), IN p_perfil VARCHAR(50),
+    IN p_airtable_client_id VARCHAR(100), IN p_operador VARCHAR(50))
 BEGIN
-    -- 1. HANDLER PARA DUPLICIDADE (CPF ou E-mail repetidos)
-    DECLARE EXIT HANDLER FOR 1062
-    BEGIN
-        ROLLBACK;
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'ERRO: Este CPF/CNPJ ou E-mail já encontra-se cadastrado no sistema.';
-    END;
-
-    -- 2. HANDLER DE DIAGNÓSTICO PAI (Repassa outros erros reais se houverem)
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
-
+    DECLARE EXIT HANDLER FOR 1062 BEGIN ROLLBACK; SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ERRO: Este CPF/CNPJ ou E-mail já encontra-se cadastrado no sistema.'; END;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN ROLLBACK; RESIGNAL; END;
     START TRANSACTION;
-
-    -- Mapeado exatamente com as colunas reais da sua tabela
-    INSERT INTO usuarios_cnpj (
-        documento, 
-        tipo_documento, 
-        email, 
-        senha_hash, -- Ajustado para o nome real da coluna
-        nome_empresa, 
-        perfil, 
-        airtable_client_id
-        -- 'operador' removido aqui por não existir na tabela
-    ) VALUES (
-        p_documento, 
-        p_tipo_documento, 
-        p_email, 
-        p_senha, 
-        p_nome_empresa, 
-        p_perfil, 
-        p_airtable_client_id
-    );
-
+    INSERT INTO usuarios_cnpj (documento,tipo_documento,email,senha_hash,nome_empresa,perfil,airtable_client_id)
+    VALUES (p_documento,p_tipo_documento,p_email,p_senha,p_nome_empresa,p_perfil,p_airtable_client_id);
     COMMIT;
 END $$
 
-
--- ROTA B: Sem sufixo (Atualizada e corrigida com tratamento inteligente de logs)
 DROP PROCEDURE IF EXISTS procedure_cadastrar_usuario $$
 CREATE PROCEDURE procedure_cadastrar_usuario(
-    IN p_documento VARCHAR(20),
-    IN p_tipo_documento VARCHAR(10),
-    IN p_email VARCHAR(100),
-    IN p_senha VARCHAR(255),
-    IN p_nome_empresa VARCHAR(150),
-    IN p_perfil VARCHAR(50),
-    IN p_airtable_client_id VARCHAR(100),
-    IN p_operador VARCHAR(50)
-)
+    IN p_documento VARCHAR(20), IN p_tipo_documento VARCHAR(10),
+    IN p_email VARCHAR(100), IN p_senha VARCHAR(255),
+    IN p_nome_empresa VARCHAR(150), IN p_perfil VARCHAR(50),
+    IN p_airtable_client_id VARCHAR(100), IN p_operador VARCHAR(50))
 BEGIN
-    -- 1. HANDLER PARA DUPLICIDADE (Código 1062 - CPF/CNPJ ou E-mail já existentes)
-    DECLARE EXIT HANDLER FOR 1062
-    BEGIN
-        ROLLBACK;
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'ERRO: Este CPF/CNPJ ou E-mail já encontra-se cadastrado no sistema.';
-    END;
-
-    -- 2. HANDLER INTELIGENTE PARA QUALQUER OUTRA FALHA INTERNA (SQLEXCEPTION)
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        DECLARE msg_erro VARCHAR(255);
-        
-        -- Captura a mensagem técnica real que o MySQL gerou (ex: quebra de Check Constraint)
-        GET DIAGNOSTICS CONDITION 1 msg_erro = MESSAGE_TEXT; 
-        
-        ROLLBACK;
-        
-        -- Envia o erro real de volta para o Node.js saber exatamente o que corrigir
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = msg_erro;
-    END;
-
-    -- Inicia o bloco de segurança
+    DECLARE EXIT HANDLER FOR 1062 BEGIN ROLLBACK; SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ERRO: Este CPF/CNPJ ou E-mail já encontra-se cadastrado no sistema.'; END;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN DECLARE msg_erro VARCHAR(255); GET DIAGNOSTICS CONDITION 1 msg_erro = MESSAGE_TEXT; ROLLBACK; SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = msg_erro; END;
     START TRANSACTION;
-
-    -- Query de inserção ajustada para bater com as colunas reais detectadas
-    INSERT INTO usuarios_cnpj (
-        documento, 
-        tipo_documento, 
-        email, 
-        senha_hash, -- Ajustado de 'senha' para 'senha_hash'
-        nome_empresa, 
-        perfil, 
-        airtable_client_id
-        -- 'operador' removido por não fazer parte do escopo físico da tabela principal
-    ) VALUES (
-        p_documento, 
-        p_tipo_documento, 
-        p_email, 
-        p_senha, 
-        p_nome_empresa, 
-        p_perfil, 
-        p_airtable_client_id
-    );
-
-    -- Confirma as alterações se nenhuma regra falhar
+    INSERT INTO usuarios_cnpj (documento,tipo_documento,email,senha_hash,nome_empresa,perfil,airtable_client_id)
+    VALUES (p_documento,p_tipo_documento,p_email,p_senha,p_nome_empresa,p_perfil,p_airtable_client_id);
     COMMIT;
 END $$
-
 DELIMITER ;
 
-
--- <<<<<<<<<<<<<<<<<<<<<<<< PARTE 11: PROCEDURE DE SOFT DELETE >>>>>>>>>>>>>>>>>>>>>>>>> 
--- ------> Procedure que marca o usuário como excluído sem apagar o registro (preserva auditoria e LGPD)
-
+-- PARTE 11: SOFT DELETE
 DELIMITER $$
-
-CREATE PROCEDURE procedure_soft_delete_usuario(
-    IN p_documento VARCHAR(14),                                                      -- ------> Documento do usuário a ser "excluído"
-    IN p_operador VARCHAR(100)                                                       -- ------> Quem está executando a exclusão
-)
+CREATE PROCEDURE procedure_soft_delete_usuario(IN p_documento VARCHAR(14), IN p_operador VARCHAR(100))
 BEGIN
     SET @usuario_sessao = p_operador;
-    
-    -- ------> Marca como inativo e registra a data, mas mantém todo o histórico no banco
-    UPDATE usuarios_cnpj
-    SET data_exclusao = CURRENT_TIMESTAMP,
-        status_conta = 'Inativo'
-    WHERE documento = p_documento AND data_exclusao IS NULL; 
-    
-    -- ------> Também revoga todas as sessões ativas do usuário
-    UPDATE sessoes_ativas
-    SET revogada = TRUE
-    WHERE usuario_id = (SELECT id FROM usuarios_cnpj WHERE documento = p_documento); 
-END $$ 
-
+    UPDATE usuarios_cnpj SET data_exclusao=CURRENT_TIMESTAMP, status_conta='Inativo' WHERE documento=p_documento AND data_exclusao IS NULL;
+    UPDATE sessoes_ativas SET revogada=TRUE WHERE usuario_id=(SELECT id FROM usuarios_cnpj WHERE documento=p_documento);
+END $$
 DELIMITER ;
 
-
--- <<<<<<<<<<<<<<<<<<<<<<<<<< PARTE 12: TRIGGERS AUTOMÁTICOS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
-
--- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Refazendo as triggers >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+-- PARTE 12: TRIGGERS
 DROP TRIGGER IF EXISTS tg_auditoria_inserir;
 DROP TRIGGER IF EXISTS tg_auditoria_atualizar;
 DROP TRIGGER IF EXISTS tg_auditoria_excluir;
 
-
--- Trigger A: Auditoria de cadastro (só para CNPJ)
 DELIMITER $$
-CREATE TRIGGER tg_auditoria_inserir
-AFTER INSERT ON usuarios_cnpj
-FOR EACH ROW
+CREATE TRIGGER tg_auditoria_inserir AFTER INSERT ON usuarios_cnpj FOR EACH ROW
 BEGIN
-    IF NEW.tipo_documento = 'CNPJ' THEN                                          -- ------> Só registra logs de clientes (CNPJ)
-        INSERT INTO auditoria_usuarios (`ID do Usuário`, `Documento Afetado`, `Tipo Documento`, `Perfil do Usuário`, `Ação Realizada`, `Operador do Sistema`)
-        VALUES (NEW.id, NEW.documento, NEW.tipo_documento, NEW.perfil, 'CADASTRO DE USUÁRIO', COALESCE(@usuario_sessao, USER()));
+    IF NEW.tipo_documento = 'CNPJ' THEN
+        INSERT INTO auditoria_usuarios (`ID do Usuário`,`Documento Afetado`,`Tipo Documento`,`Perfil do Usuário`,`Ação Realizada`,`Operador do Sistema`)
+        VALUES (NEW.id,NEW.documento,NEW.tipo_documento,NEW.perfil,'CADASTRO DE USUÁRIO',COALESCE(@usuario_sessao,USER()));
     END IF;
 END$$
-DELIMITER ;
 
-
-
--- Trigger B: Auditoria de atualização (só para CNPJ)
-DELIMITER $$
-CREATE TRIGGER tg_auditoria_atualizar
-AFTER UPDATE ON usuarios_cnpj
-FOR EACH ROW
+CREATE TRIGGER tg_auditoria_atualizar AFTER UPDATE ON usuarios_cnpj FOR EACH ROW
 BEGIN
-    IF NEW.tipo_documento = 'CNPJ' THEN                                          -- ------> Só registra logs de clientes (CNPJ)
-        INSERT INTO auditoria_usuarios (`ID do Usuário`, `Documento Afetado`, `Tipo Documento`, `Perfil do Usuário`, `Ação Realizada`, `Operador do Sistema`)
-        VALUES (
-            NEW.id, NEW.documento, NEW.tipo_documento, NEW.perfil,
-            CASE 
+    IF NEW.tipo_documento = 'CNPJ' THEN
+        INSERT INTO auditoria_usuarios (`ID do Usuário`,`Documento Afetado`,`Tipo Documento`,`Perfil do Usuário`,`Ação Realizada`,`Operador do Sistema`)
+        VALUES (NEW.id,NEW.documento,NEW.tipo_documento,NEW.perfil,
+            CASE
                 WHEN OLD.data_exclusao IS NULL AND NEW.data_exclusao IS NOT NULL THEN 'SOFT DELETE - CONTA MARCADA COMO EXCLUÍDA'
-                WHEN OLD.status_conta <> NEW.status_conta THEN CONCAT('STATUS: ', OLD.status_conta, ' -> ', NEW.status_conta)
-                WHEN OLD.perfil <> NEW.perfil THEN CONCAT('PERFIL: ', OLD.perfil, ' -> ', NEW.perfil)
+                WHEN OLD.status_conta <> NEW.status_conta THEN CONCAT('STATUS: ',OLD.status_conta,' -> ',NEW.status_conta)
+                WHEN OLD.perfil <> NEW.perfil THEN CONCAT('PERFIL: ',OLD.perfil,' -> ',NEW.perfil)
                 WHEN COALESCE(OLD.airtable_client_id,'') <> COALESCE(NEW.airtable_client_id,'') THEN 'VÍNCULO AIRTABLE ATUALIZADO'
                 WHEN NEW.bloqueado_ate IS NOT NULL AND OLD.bloqueado_ate IS NULL THEN 'CONTA BLOQUEADA POR EXCESSO DE TENTATIVAS'
                 ELSE 'ATUALIZAÇÃO DE DADOS'
             END,
-            COALESCE(@usuario_sessao, USER())
-        );
+            COALESCE(@usuario_sessao,USER()));
+    END IF;
+END$$
+
+CREATE TRIGGER tg_auditoria_excluir AFTER DELETE ON usuarios_cnpj FOR EACH ROW
+BEGIN
+    IF OLD.tipo_documento = 'CNPJ' THEN
+        INSERT INTO auditoria_usuarios (`ID do Usuário`,`Documento Afetado`,`Tipo Documento`,`Perfil do Usuário`,`Ação Realizada`,`Operador do Sistema`)
+        VALUES (OLD.id,OLD.documento,OLD.tipo_documento,OLD.perfil,'EXCLUSÃO DEFINITIVA DA CONTA',COALESCE(@usuario_sessao,USER()));
     END IF;
 END$$
 DELIMITER ;
 
-
--- Trigger C: Auditoria de exclusão (só para CNPJ)
+-- PARTE 14: PROCEDURES DE LIMPEZA
 DELIMITER $$
-CREATE TRIGGER tg_auditoria_excluir
-AFTER DELETE ON usuarios_cnpj
-FOR EACH ROW
-BEGIN
-    IF OLD.tipo_documento = 'CNPJ' THEN                                          -- ------> Só registra logs de clientes (CNPJ)
-        INSERT INTO auditoria_usuarios (`ID do Usuário`, `Documento Afetado`, `Tipo Documento`, `Perfil do Usuário`, `Ação Realizada`, `Operador do Sistema`)
-        VALUES (OLD.id, OLD.documento, OLD.tipo_documento, OLD.perfil, 'EXCLUSÃO DEFINITIVA DA CONTA', COALESCE(@usuario_sessao, USER()));
-    END IF;
-END$$
+CREATE PROCEDURE procedure_limpar_sessoes_expiradas() BEGIN DELETE FROM sessoes_ativas WHERE expira_em < NOW() OR (revogada=TRUE AND criada_em < DATE_SUB(NOW(),INTERVAL 30 DAY)); END $$
+CREATE PROCEDURE procedure_limpar_historico_antigo() BEGIN DELETE FROM historico_logins WHERE data_tentativa < DATE_SUB(NOW(),INTERVAL 3 MONTH); END $$
+CREATE PROCEDURE procedure_limpar_auditoria_antiga() BEGIN DELETE FROM auditoria_usuarios WHERE `Data e Hora da Ação` < DATE_SUB(NOW(),INTERVAL 6 MONTH); END $$
+CREATE PROCEDURE procedure_limpar_tokens_reset() BEGIN UPDATE usuarios_cnpj SET reset_token=NULL,reset_expires=NULL WHERE reset_expires IS NOT NULL AND reset_expires < NOW(); END $$
 DELIMITER ;
 
-
-
--- <<<<<<<<<<<<<<<<<<<<< PARTE 13: TESTE PRÁTICO DO COFRE >>>>>>>>>>>>>>>>>>>>>>>>> 
-
-/* CALL procedure_cadastrar_usuario_cnpj(
-    '11444777000161', 'CNPJ', 'contato@empresa.com', 
-    '$11111111111111111111111111111111111111111111111111111111111', 
-    'Empresa Teste LTDA', 'Cliente', 'recXXXXXXXXXXXXXX', 'admin_ti@itr.com'
-); */
-
-/* CALL procedure_cadastrar_usuario_cnpj(
-    '11144477735', 'CPF', 'funcionario@itr.com', 
-    '$22222222222222222222222222222222222222222222222222222222222', 
-    'João Silva', 'Funcionario', NULL, 'admin_ti@itr.com'
-); */ 
-
-/* CALL procedure_cadastrar_usuario_cnpj(
-    '52998224725', 'CPF', 'ti@itr.com', 
-    '$33333333333333333333333333333333333333333333333333333333333', 
-    'Mateus Nascimento', 'Gerente_TI', NULL, 'admin_ti@itr.com'
-); */ 
-
-
--- <<<<<<<<<<<<<<<<<<<<<<<<<< Parte 14: Limpeza de sessão (tanto para Logs quanto para tokens) >>>>>>>>>>>>>>>>>>>>>>> 
--- ------> Procedures de limpeza para manter o banco rápido e leve
-
--- LIMPEZA 1: Sessões expiradas
-DELIMITER $$
-CREATE PROCEDURE procedure_limpar_sessoes_expiradas()
-BEGIN
-    DELETE FROM sessoes_ativas
-    WHERE expira_em < NOW()
-       OR (revogada = TRUE AND criada_em < DATE_SUB(NOW(), INTERVAL 30 DAY));
-END $$ 
-DELIMITER ; 
-
-
--- LIMPEZA 2: Histórico de logins com mais de 3 meses 
-DELIMITER $$
-CREATE PROCEDURE procedure_limpar_historico_antigo()
-BEGIN
-    DELETE FROM historico_logins
-    WHERE data_tentativa < DATE_SUB(NOW(), INTERVAL 3 MONTH);
-END $$
-DELIMITER ;
-
-
--- LIMPEZA 3: Auditoria com mais de 6 meses
-DELIMITER $$
-CREATE PROCEDURE procedure_limpar_auditoria_antiga() 
-BEGIN
-    DELETE FROM auditoria_usuarios
-    WHERE `Data e Hora da Ação` < DATE_SUB(NOW(), INTERVAL 6 MONTH);
-END $$
-DELIMITER ;
-
--- LIMPEZA 4: Tokens de reset de senha expirados
-DELIMITER $$
-CREATE PROCEDURE procedure_limpar_tokens_reset()
-BEGIN
-    UPDATE usuarios_cnpj
-    SET reset_token = NULL, reset_expires = NULL
-    WHERE reset_expires IS NOT NULL AND reset_expires < NOW();
-END $$
-DELIMITER ; 
-
-
--- <<<<<<<<<<<<<<<<<<<<<<<< PARTE 15: EVENTOS AGENDADOS >>>>>>>>>>>>>>>>>>>>>>>>> 
--- ------> Executa as limpezas automaticamente em horários definidos
-
-SET GLOBAL event_scheduler = ON;                                                 -- ------> Ativa o agendador automático do MySQL
+-- PARTE 15: EVENTOS AGENDADOS
+SET GLOBAL event_scheduler = ON;
 
 DROP EVENT IF EXISTS evento_limpar_sessoes;
-CREATE EVENT evento_limpar_sessoes
-ON SCHEDULE EVERY 1 HOUR
-DO CALL procedure_limpar_sessoes_expiradas();
-
+CREATE EVENT evento_limpar_sessoes ON SCHEDULE EVERY 1 HOUR DO CALL procedure_limpar_sessoes_expiradas();
 
 DROP EVENT IF EXISTS evento_limpar_historico;
-CREATE EVENT evento_limpar_historico
-ON SCHEDULE EVERY 1 DAY 
-STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 27 HOUR)
-DO CALL procedure_limpar_historico_antigo();
-
+CREATE EVENT evento_limpar_historico ON SCHEDULE EVERY 1 DAY STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 27 HOUR) DO CALL procedure_limpar_historico_antigo();
 
 DROP EVENT IF EXISTS evento_limpar_auditoria;
-CREATE EVENT evento_limpar_auditoria
-ON SCHEDULE EVERY 1 DAY
-STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 27 HOUR)
-DO CALL procedure_limpar_auditoria_antiga();
-
+CREATE EVENT evento_limpar_auditoria ON SCHEDULE EVERY 1 DAY STARTS (TIMESTAMP(CURRENT_DATE) + INTERVAL 27 HOUR) DO CALL procedure_limpar_auditoria_antiga();
 
 DROP EVENT IF EXISTS evento_limpar_tokens;
-CREATE EVENT evento_limpar_tokens
-ON SCHEDULE EVERY 30 MINUTE
-DO CALL procedure_limpar_tokens_reset();
+CREATE EVENT evento_limpar_tokens ON SCHEDULE EVERY 30 MINUTE DO CALL procedure_limpar_tokens_reset();
 
+DELETE FROM usuarios_cnpj WHERE documento = '25504664405';
 
--- <<<<<<<<<<<<<<<<<<<<< VISUALIZAÇÃO DOS RESULTADOS >>>>>>>>>>>>>>>>>>>>>>>>> 
+SELECT id, documento, email, perfil, airtable_client_id, status_conta, ultimo_login
+FROM usuarios_cnpj
+WHERE documento = '25504664405';
 
-SELECT id, documento, tipo_documento, email, nome_empresa, perfil, status_conta, data_exclusao FROM usuarios_cnpj;
-SELECT * FROM permissoes_perfil;
-SELECT * FROM auditoria_usuarios;
-
--- Novos Selects 
-SELECT * FROM sessoes_ativas;
-SELECT * FROM historico_logins;
+UPDATE usuarios_cnpj
+SET airtable_client_id = 'rectEDZrt5unCtR4Z'
+WHERE documento = '25504664405';  
