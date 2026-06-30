@@ -1,18 +1,41 @@
-# ITR Engenharia — Banco de Dados para Gestão de Amostras
+# Sistema de Gestão e Sincronização — ITR Engenharia
 
-Camada de persistência e modelagem relacional em MySQL desenvolvida para o **Sistema de Gestão de Amostras Laboratoriais** da Empresa ITR Engenharia. Este repositório concentra a inteligência de dados, tabelas estruturadas e restrições de integridade que servem de fundação para a futura API (Node.js/Express) e integração com o Airtable.
+Este repositório contém a infraestrutura de backend para a **Gestão de Amostras Laboratoriais** da empresa de Engenharia Civil "ITR Engenharia". O sistema atua como uma camada de integração (middleware) entre o Airtable (Fonte de Dados da companhia) e um banco de dados constrído no MySQL, permitindo consultas de alta performance e processamento de diagnósticos de clientes/ensaios e amostras. 
 
-## Características da Engenharia do Banco
+##  Objetivo da Aplicação
+Automatizar a sincronização de dados entre o Airtable e o banco de dados relacional (MySQL), disponibilizando uma API para consumo pela interface web. O foco é garantir que os dados de laboratório estejam sempre consistentes, validados e disponíveis para busca em tempo real.
 
-* **Arquitetura Relacional Conectada:** Modelagem focada no ecossistema laboratorial, estabelecendo relacionamentos precisos (Chaves Estrangeiras) entre as tabelas de **Amostras**, **Clientes** e **Ensaios Técnicos** para impedir a redundância.
-* **Consistência para Dados Dinâmicos:** Tabelas projetadas estrategicamente para validar e armazenar os campos de seleção dinâmicos provenientes da API do Airtable, garantindo integridade quando o back-end sincronizar os dados.
-* **Performance em Consultas (Busca em Tempo Real):** Implementação de índices estruturados (B-Tree) nas colunas de maior relevância de pesquisa, permitindo que a busca em tempo real da interface web responda em microsegundos, sem gargalos.
-* **Validação Nativa no Motor do Banco:** Uso de restrições de validação rígidas (`Constraints`) que blindam o banco de dados contra payloads malformados antes mesmo que a informação chegue à camada de aplicação.
+##  Stack Tecnológico
+- **Runtime:** Node.js
+- **Framework:** Express.js
+- **Persistência:** MySQL
+- **Integração:** Airtable API
+- **Ferramentas de Dev:** REST Client (`.http`)
 
-## Tecnologias Utilizadas
-* **SGBD:** MySQL 8.0+ CE
-* **Modelagem:** Relacional (SQL ANSI) 
+##  Estrutura do Projeto
+- `server.js`: Ponto de entrada e configuração do servidor HTTP.
+- `db.js`: Gerenciamento da conexão e queries com o banco de dados MySQL.
+- `airtable.js`: Lógica de consumo da API do Airtable.
+- `diagnostico_cliente.js`: Lógica de negócio para processamento dos diagnósticos.
+- `requisicoes.http`: Arquivo para testes locais de rotas.
+- `.env`: Configurações sensíveis (não versionado).
+
+## Como Executar
+
+### Pré-requisitos (aplicação Web) 
+- Node.js (v16+)
+- MySQL 8.0+
+- VSCode 1.125 (Preferível) 
+
+### Instalação
+1. Clone o repositório: `git clone <url-do-repositorio>` 
+2. Instale as dependências: `npm install`
+3. Configure o arquivo `.env` (DB_HOST, DB_USER, DB_PASS, AIRTABLE_API_KEY).
+4. Inicie o servidor: `npm start`
+
+## Segurança e Governança
+- **Variáveis de Ambiente:** O arquivo `.env` não é versionado (contém chaves sensíveis).
+- **Consistência:** Uso de *constraints* nativas no MySQL para garantir a integridade e veracidade dos dados.
 
 ---
-© **ITR Engenharia** — *Uso interno e restrito.*
-
+*© **ITR Engenharia** — Uso interno e restrito.*
