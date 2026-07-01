@@ -8,7 +8,7 @@ const path = require('path');
 const app = express();
 
 // Funções do Airtable (inclui urlRelatorioAprovado para o download do PDF)
-const { buscarTrabalhosDoCliente, buscarClientePorCnpj, urlRelatorioAprovado } = require('./airtable');
+const { buscarTrabalhosDoCliente, buscarClientePorCnpj, urlRelatorioAprovado, listarClientes, definirAprovacao, APROVACAO_VALIDAS } = require('./airtable');
 
 // Permite que o servidor entenda dados em formato JSON (enviados pelas telas)
 app.use(express.json());
@@ -167,6 +167,16 @@ function autenticado(req, res, next) {
     });
 }
 
+// ==================== MIDDLEWARE: SÓ DIRETOR ====================
+// Usar SEMPRE depois de `autenticado` (ele já preencheu req.usuario.perfil).
+// Barra qualquer perfil que não seja Diretor — as rotas do painel são exclusivas.
+function somenteDiretor(req, res, next) {
+    if (!req.usuario || req.usuario.perfil !== 'Diretor') {
+        return res.status(403).json({ sucesso: false, erro: 'Acesso restrito ao Diretor.' });
+    }
+    next();
+}
+
 // ==================== ROTA PROTEGIDA DE TESTE ====================
 // Só responde se o token for válido. Bom para testar o login.
 app.get('/perfil', autenticado, (req, res) => {
@@ -209,6 +219,54 @@ app.get('/api/relatorio/:id', autenticado, async (req, res) => {
 
         // Redireciona direto para a URL fresca do PDF (abre no navegador / baixa de lá).
         return res.redirect(arquivo.url);
+    } catch (error) {
+        return res.status(500).json({ sucesso: false, erro: error.message });
+    }
+});
+
+// ==================== PAINEL DO DIRETOR ====================
+// Todas exigem: autenticado + somenteDiretor.
+
+// 1) Lista todos os clientes (as "nuvenzinhas").
+app.get('/api/clientes', autenticado, somenteDiretor, async (req, res) => {
+    try {
+        const clientes = await listarClientes();
+        return res.json({ sucesso: true, clientes });
+    } catch (error) {
+        return res.status(500).json({ sucesso: false, erro: error.message });
+    }
+});
+
+// 2) Trabalhos de UM cliente escolhido pelo Diretor (reusa a busca do portal).
+//    O Diretor passa o recordId do cliente na URL; aqui NAO ha isolamento pelo
+//    proprio usuario (ele pode ver qualquer cliente) — por isso e somenteDiretor.
+app.get('/api/cliente/:id/trabalhos', autenticado, somenteDiretor, async (req, res) => {
+    try {
+        const recordIdCliente = req.params.id;
+        const offset = req.query.offset || null;
+        const modo = req.query.modo === 'todos' ? 'todos' : 'recente';
+        // Painel do Diretor usa janela de 6 meses (o portal do cliente segue 3).
+        const dados = await buscarTrabalhosDoCliente(recordIdCliente, offset, modo, 6);
+        return res.json({ sucesso: true, ...dados });
+    } catch (error) {
+        return res.status(500).json({ sucesso: false, erro: error.message });
+    }
+});
+
+// 3) Define a Aprovação de um trabalho (Aprovado / Refazer / Em Andamento).
+//    So grava o campo "Aprovação"; a automacao do Airtable move o PDF sozinha.
+app.patch('/api/trabalho/:id/aprovacao', autenticado, somenteDiretor, async (req, res) => {
+    try {
+        const recordIdTrabalho = req.params.id;
+        const { valor } = req.body;
+        if (!APROVACAO_VALIDAS.includes(valor)) {
+            return res.status(400).json({
+                sucesso: false,
+                erro: `Valor inválido. Use um de: ${APROVACAO_VALIDAS.join(', ')}.`
+            });
+        }
+        const resultado = await definirAprovacao(recordIdTrabalho, valor);
+        return res.json({ sucesso: true, ...resultado });
     } catch (error) {
         return res.status(500).json({ sucesso: false, erro: error.message });
     }

@@ -1,6 +1,25 @@
 // airtable.js
 // Busca os trabalhos (ensaios) de um cliente no Airtable.
-
+// Filtro confiavel: o campo "ID Trabalho" comeca com "<ID Cliente>_" (ex: "GEODEEP_...").
+//
+// ====================================================================
+// CORRECOES APLICADAS (com base no diagnostico real da base — jun/2026):
+//   1) AMOSTRA: trocada a fonte de 'Nome da Amostra' (lookup, vazio em
+//      47% dos registros) para 'Link Amostras' (texto, 100% preenchido).
+//      Quando houver varias amostras, mostra a primeira + "+N".
+//   2) ENSAIO: trocada a fonte de 'Link Ensaios' (siglas cruas + lixo)
+//      para 'Nome_Completo_Ensaios' (lookup, 98% pronto e limpo).
+//      Fallback: traduz a sigla pelo mapa da tabela Ensaios; se nem isso
+//      existir e parecer um ID de trabalho vazado, marca como "lixo".
+//   3) ORDEM DE SERVICO: corrigido o campo lido na tabela OS — o nome
+//      legivel esta em 'ID' (ex.: "OS 28", "Ferrovia"), nao em 'Name'
+//      (que estava vazio em 47/48). Isolamento por cliente e nativo:
+//      a OS so aparece se estiver num trabalho que ja e do cliente.
+//   4) DATAS: leitura padronizada (todas passam por primeiro()), para
+//      tratar igual os campos que vem como array e os que vem como texto.
+//   5) ISOLAMENTO: auditado — 559/559 trabalhos da Geodeep no padrao,
+//      zero vazios, zero fora do padrao. Filtro por prefixo mantido.
+// ====================================================================
 require('dotenv').config();
 
 const TOKEN = process.env.AIRTABLE_TOKEN;
@@ -27,12 +46,30 @@ const MESES_RECENTE = 3;
 //       'Data da Última Atualização Update'  (o que foi mexido por ultimo)
 //       'Data de Envio do Relatório'         (o que teve relatorio enviado)
 //       'Data Lançamento'                    (data de lancamento)
-const CAMPO_ORDENACAO = 'Data de Chegada';
+const CAMPO_ORDENACAO = 'createdTime'; // meta-dado do proprio registro Airtable (ordem real de cadastro);
+                                        // NAO e um campo de coluna, entao nao entra em sort da API —
+                                        // ordenacao feita em memoria (ver bloco 3 abaixo).
 
 async function airtableGet(url) {
     const resp = await fetch(url, { headers: { Authorization: `Bearer ${TOKEN}` } });
     const dados = await resp.json();
     if (!resp.ok) throw new Error(dados.error?.message || 'Erro ao consultar o Airtable');
+    return dados;
+}
+
+// PATCH (escrita) — usado pela aprovacao. Ate aqui o arquivo so LIA do Airtable;
+// esta e a primeira escrita. So altera os campos passados em `fields`.
+async function airtablePatch(url, fields) {
+    const resp = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+            Authorization: `Bearer ${TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fields })
+    });
+    const dados = await resp.json();
+    if (!resp.ok) throw new Error(dados.error?.message || 'Erro ao gravar no Airtable');
     return dados;
 }
 
@@ -213,9 +250,10 @@ function contarItens(valor) {
     return (valor != null && String(valor).trim() !== '') ? 1 : 0;
 }
 
-function dataLimiteRecente() {
+function dataLimiteRecente(meses) {
+    const n = (typeof meses === 'number' && meses > 0) ? meses : MESES_RECENTE;
     const d = new Date();
-    d.setMonth(d.getMonth() - MESES_RECENTE);
+    d.setMonth(d.getMonth() - n);
     return d.toISOString().slice(0, 10);
 }
 
@@ -300,9 +338,10 @@ function formatar(rec, mapa, mapaOrdens) {
         || datas['Data de Chegada']
         || null;
 
-    // Data usada para ORDENAR (mais recente = atualizado por ultimo).
-    // 100% preenchida, entao a ordenacao no front fica coerente com o backend.
-    const dataOrdenacao = primeiro(f[CAMPO_ORDENACAO]) || dataPrincipal || null;
+    // Data usada para ORDENAR ("mais recente" = ultimo CADASTRADO no Airtable,
+    // pelo timestamp interno createdTime — decisao revisada; nao usa mais
+    // Data de Chegada). 100% preenchida (todo registro tem createdTime).
+    const dataOrdenacao = rec.createdTime || dataPrincipal || null;
 
     return {
         id: rec.id,
@@ -342,7 +381,7 @@ function formatar(rec, mapa, mapaOrdens) {
 // ==================== BUSCAR TRABALHOS DO CLIENTE ====================
 // modo 'recente' (padrao): em andamento OU enviado nos ultimos N meses.
 // modo 'todos': historico completo.
-async function buscarTrabalhosDoCliente(recordIdCliente, offset = null, modo = 'recente') {
+async function buscarTrabalhosDoCliente(recordIdCliente, offset = null, modo = 'recente', meses = null) {
     // 0. Dicionarios (ensaios + ordens de servico), ambos cacheados
     const mapa = await carregarMapaEnsaios();
     const mapaOrdens = await carregarMapaOS();
@@ -388,34 +427,41 @@ async function buscarTrabalhosDoCliente(recordIdCliente, offset = null, modo = '
 
     let formula;
     if (modo === 'recente') {
-        const limite = dataLimiteRecente();
-        // "recente" = atualizado nos ultimos N meses (ou sem data, por seguranca).
-        formula =
-            `AND(${ligacao}, OR(` +
-                `{${CAMPO_ORDENACAO}} = BLANK(), ` +
-                `IS_AFTER({${CAMPO_ORDENACAO}}, '${limite}')` +
-            `))`;
+        const limite = dataLimiteRecente(meses);
+        // "recente" = cadastrado nos ultimos N meses. CREATED_TIME() e funcao
+        // nativa do Airtable (sempre preenchida) — nao precisa de OR com BLANK().
+        formula = `AND(${ligacao}, IS_AFTER(CREATED_TIME(), '${limite}'))`;
     } else {
         formula = ligacao;
     }
 
-    // 3. Filtra, ordena pelo campo de atualizacao (mais novo primeiro), pagina
-    let url = `${API}/${TBL_NOVOS_TRABALHOS}`
-        + `?filterByFormula=${encodeURIComponent(formula)}`
-        + `&pageSize=${TAMANHO_PAGINA}`
-        + `&sort%5B0%5D%5Bfield%5D=${encodeURIComponent(CAMPO_ORDENACAO)}`
-        + `&sort%5B0%5D%5Bdirection%5D=desc`;
+    // 3. Filtra e busca TODAS as paginas antes de ordenar. createdTime e
+    //    meta-dado (a API nao ordena por ele), entao a ordem so fica correta
+    //    ordenando o conjunto COMPLETO em memoria — nao basta ordenar por
+    //    pagina, porque dois trabalhos do mesmo cliente podem cair em paginas
+    //    diferentes (foi o bug do REG 638 vs C11-01). O parametro `offset` de
+    //    entrada passa a ser ignorado: a paginacao agora e interna.
+    let todosRecords = [];
+    let offsetAt = null;
+    do {
+        let url = `${API}/${TBL_NOVOS_TRABALHOS}`
+            + `?filterByFormula=${encodeURIComponent(formula)}`
+            + `&pageSize=${TAMANHO_PAGINA}`;
+        if (offsetAt) url += `&offset=${encodeURIComponent(offsetAt)}`;
+        const resp = await airtableGet(url);
+        todosRecords = todosRecords.concat(resp.records || []);
+        offsetAt = resp.offset || null;
+    } while (offsetAt);
 
-    if (offset) url += `&offset=${encodeURIComponent(offset)}`;
-
-    const resp = await airtableGet(url);
-    const trabalhos = (resp.records || []).map(rec => formatar(rec, mapa, mapaOrdens));
+    const trabalhos = todosRecords
+        .map(rec => formatar(rec, mapa, mapaOrdens))
+        .sort((a, b) => new Date(b.data_ordenacao) - new Date(a.data_ordenacao));
 
     return {
         nome_cliente: nomeCliente,
         trabalhos,
-        offset: resp.offset || null,
-        tem_mais: !!resp.offset,
+        offset: null,      // sem paginacao externa: veio tudo de uma vez
+        tem_mais: false,
         modo
     };
 }
@@ -451,4 +497,55 @@ async function buscarClientePorCnpj(cnpj) {
     };
 }
 
-module.exports = { buscarTrabalhosDoCliente, buscarClientePorCnpj, urlRelatorioAprovado };
+// ==================== PAINEL DO DIRETOR ====================
+
+// Lista TODOS os clientes do Airtable (as "nuvenzinhas" do painel).
+// Retorna id (record), nome e idCliente (prefixo). Ordenado por nome.
+async function listarClientes() {
+    let todos = [];
+    let offset = null;
+    do {
+        let url = `${API}/${TBL_CLIENTES}?pageSize=${TAMANHO_PAGINA}`
+            + `&fields%5B%5D=${encodeURIComponent('Nome Cliente')}`
+            + `&fields%5B%5D=${encodeURIComponent('ID Cliente')}`;
+        if (offset) url += `&offset=${encodeURIComponent(offset)}`;
+        const resp = await airtableGet(url);
+        todos = todos.concat(resp.records || []);
+        offset = resp.offset || null;
+    } while (offset);
+
+    // O rótulo exibido é "ID Cliente" (decisão: é onde está o nome real da
+    // empresa — ex: "Grupo Aterpa"). "Nome Cliente" fica como fallback e é o
+    // que o isolamento de trabalhos usa internamente (não mudar aquilo).
+    return todos
+        .map(rec => ({
+            id: rec.id,
+           nome: (rec.fields['ID Cliente'] || '(sem nome)').trim(),
+            idCliente: rec.fields['ID Cliente'] || null
+        }))
+        .filter(c => c.nome && c.nome !== '(sem nome)')
+        .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+}
+
+// Define o campo "Aprovação" de um trabalho. A automacao do Airtable cuida do
+// resto (quando vira "Aprovado", copia o PDF de Relatorios -> Relatorios_Aprovados).
+// Valores validos = as opcoes do singleSelect na base.
+const APROVACAO_VALIDAS = ['Aprovado', 'Refazer', 'Em Andamento'];
+
+async function definirAprovacao(recordIdTrabalho, valor) {
+    if (!APROVACAO_VALIDAS.includes(valor)) {
+        throw new Error(`Valor de aprovação inválido: "${valor}".`);
+    }
+    const url = `${API}/${TBL_NOVOS_TRABALHOS}/${recordIdTrabalho}`;
+    const resp = await airtablePatch(url, { 'Aprovação': valor });
+    return { id: resp.id, aprovacao: resp.fields?.['Aprovação'] || valor };
+}
+
+module.exports = {
+    buscarTrabalhosDoCliente,
+    buscarClientePorCnpj,
+    urlRelatorioAprovado,
+    listarClientes,
+    definirAprovacao,
+    APROVACAO_VALIDAS
+};

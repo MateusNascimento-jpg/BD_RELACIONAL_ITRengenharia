@@ -563,11 +563,47 @@
 
   <!-- Saudação -->
   <div class="saudacao">
-    <h1 id="saudacao">Seja muito bem-vindo, <span id="nomeCliente" class="nome-empresa"><i class="ti ti-building" aria-hidden="true"></i><span id="nomeTexto">Geodeep</span>!</span></h1>
-    <div class="sub">Acompanhe aqui o andamento dos seus ensaios e baixe os relatórios aprovados.</div>
-    <div class="freshness" id="freshness"><i class="ti ti-refresh" aria-hidden="true"></i><span id="freshnessTxt">Atualizado agora há pouco</span></div>
+  <h1 id="saudacao" style="
+      font-size: 28px; 
+      font-weight: 600; 
+      color: #f4f4f5; 
+      margin: 0 0 16px 0; 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      flex-wrap: wrap;">
+    
+    Seja muito bem-vindo, 
+    
+    <span id="nomeCliente" class="nome-empresa" style="
+        display: inline-flex; 
+        align-items: center; 
+        /* Estilo Moderno e Tech */
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: #ffffff; 
+        padding: 6px 16px; 
+        border-radius: 8px; 
+        font-weight: 800; 
+        text-transform: uppercase; 
+        font-size: 20px; 
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        line-height: 1;
+    ">
+      <span id="nomeTexto">GEODEEP</span>
+    </span>
+  </h1>
+  
+  <div class="sub" style="color: #a1a1aa; font-size: 14px; margin-top: 10px;">
+    Acompanhe aqui o andamento dos seus ensaios e baixe os relatórios aprovados.
   </div>
-
+  
+  <div class="freshness" id="freshness" style="margin-top: 10px; color: #71717a; font-size: 12px; display: flex; align-items: center; gap: 6px;">
+    <i class="ti ti-refresh" aria-hidden="true"></i>
+    <span id="nomeTexto">Atualizado agora há pouco</span>
+  </div>
+</div>
   <!-- Contadores (também funcionam como filtros ao clicar) -->
   <section class="resumo" id="resumo" aria-label="Resumo dos seus ensaios">
     <button class="kpi" data-kpi="todos" aria-pressed="false">
@@ -1335,7 +1371,7 @@ function sincronizarKpis(){
   document.querySelectorAll('.kpi').forEach(function(k){
     var tipo = k.getAttribute('data-kpi');
     var ativo = (tipo === filtroKpi) || (tipo === 'todos' && !filtroKpi);
-    // "Total de ensaios" só fica aceso quando NÃO há filtro de KPI (estado neutro)
+    // "Total de ensaios" só fica aceso quando NÃO há filtro de KPI (estado neutro;aparecem todos os tipos de amostra)
     if(tipo === 'todos') ativo = !filtroKpi;
     k.classList.toggle('ativo', ativo);
     k.setAttribute('aria-pressed', ativo ? 'true' : 'false');
@@ -1347,9 +1383,9 @@ document.querySelectorAll('.kpi').forEach(function(k){
     if(tipo === 'todos'){
       filtroKpi = '';               // "Total" limpa o atalho (mostra tudo)
     } else if(filtroKpi === tipo){
-      filtroKpi = '';               // clicar de novo no mesmo desliga
+      filtroKpi = '';               // Clicar de novo no mesmo desliga
     } else {
-      filtroKpi = tipo;             // ativa o atalho escolhido
+      filtroKpi = tipo;             // Ativa o atalho escolhido
     }
     sincronizarKpis();
     aplicarFiltros();
@@ -1372,7 +1408,7 @@ document.getElementById('btnSair').addEventListener('click', function(){
 });
 document.getElementById('logoLink').addEventListener('click', function(e){ e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); });
 
-/* ---- Alternar tema claro/escuro (sempre inicia no escuro) ---- */
+/* ---- Alternar tema claro/escuro (sempre inicia no modo escuro como padrão) ---- */
 var SVG_SOL = '<circle cx="12" cy="12" r="4"/><path d="M3 12h1M20 12h1M12 3v1M12 20v1M5.6 5.6l.7 .7M17.7 17.7l.7 .7M18.4 5.6l-.7 .7M6.3 17.7l-.7 .7"/>';
 var SVG_LUA = '<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/>';
 document.getElementById('btnTema').addEventListener('click', function(){
@@ -1382,11 +1418,11 @@ document.getElementById('btnTema').addEventListener('click', function(){
   if(claro){ raiz.removeAttribute('data-tema'); icone.innerHTML = SVG_SOL; }
   else { raiz.setAttribute('data-tema','claro'); icone.innerHTML = SVG_LUA; }
   if(window._redesenharFundo) setTimeout(window._redesenharFundo, 60);
-});
+}); 
 
-/* ---- Scroll infinito via IntersectionObserver ---- */
+/* ---- Scroll infinito via "IntersectionObserver" (Elimina a função "Carregar Mais") ---- */
 var obs = new IntersectionObserver(function(entradas){
-  if(entradas[0].isIntersecting && mostrados < visiveis.length){ renderizarMais(); }
+  if(entradas[0].isIntersecting && mostrados < visiaveis.length){ renderizarMais(); }
 }, { rootMargin:'300px' });
 obs.observe(document.getElementById('sentinela'));
 

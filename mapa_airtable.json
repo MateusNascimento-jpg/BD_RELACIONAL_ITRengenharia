@@ -1,5 +1,5 @@
 {
-  "gerado_em": "2026-06-29T11:09:22.789Z",
+  "gerado_em": "2026-06-30T13:48:19.058Z",
   "base_id": "(omitido)",
   "tabelas": {
     "Amostras": {
@@ -166,11 +166,11 @@
           "total": 800,
           "faltando": 0,
           "exemplos": [
-            "111",
-            "252",
-            "13",
-            "271",
-            "271"
+            "112",
+            "253",
+            "14",
+            "272",
+            "272"
           ]
         },
         "Ensaios": {
@@ -940,11 +940,11 @@
           "total": 800,
           "faltando": 0,
           "exemplos": [
-            "153",
-            "201",
-            "241",
-            "209",
-            "313"
+            "154",
+            "202",
+            "242",
+            "210",
+            "314"
           ]
         },
         "Ensaio": {
@@ -1683,8 +1683,8 @@
           "exemplos": [
             "2026-06-26T19:10:00.291Z",
             "2026-05-12T14:06:09.191Z",
-            "2026-06-26T17:03:22.146Z",
-            "2026-01-23T13:39:09.859Z",
+            "2026-06-29T14:28:57.523Z",
+            "2026-06-29T14:33:24.506Z",
             "2026-05-12T14:06:26.961Z"
           ]
         },
@@ -1735,8 +1735,8 @@
           "tipos": {
             "array<link(rec)>[208]": 1,
             "array<link(rec)>[16]": 1,
-            "array<link(rec)>[480]": 1,
-            "array<link(rec)>[9]": 1,
+            "array<link(rec)>[477]": 1,
+            "array<link(rec)>[12]": 1,
             "array<link(rec)>[210]": 1,
             "array<link(rec)>[1250]": 1
           },
@@ -1746,8 +1746,8 @@
           "exemplos": [
             "[recn94I3QzsbNafov | recVY0Ph7oTBC6QzF | recRKXt2jUZgUgh0u | recFqE6USeHFsMEye | reccwMzFCmBDs4ApT | recxwWCCOsyocF7QR | rec8dwWfGeqjmdGQF | recFLGWnonIXqLJlk | recDJV4Me6KsP2Xhy | recP5oHr6fLa2IYx9 | recLNWIQil4UEYljJ | recydSgyWq2sSHXZR | rec1ayuo6adJK9InM | recg5kC1ja4DbsqYf | recj1jHjB1otvVBkV | recTjvfBxzvi3ny5l | recFdOWHzBGhm76Ws | recYp3PBYTs7p6n6Y | rec47UQ5tfvupWSsh | reccMZrLL4jS68B23 | recIrMxVJLpSZUcnh | rec6jZ7CE0ZIgVaiY | recNwZfowiDDzgxi6 | rec9blTVeMRGpsEe3 | recckuZcIbkqWiK1c | recZV6EBBSDBFDJgb | rec4loTK0lOCb4Cig | recQxKoGa9rUlFnEk | recymacCbWSFWfvTi | recgC8CZFEBPSwtgC | rec2p39s6DmRj53oh | recXz48VaQFv1lStS | recrIzYdPXjYZLBlu | recmctZCKsVgwwMM5 | rectqAO1Z0g49y9Pg | recB5z1YeEYxbAPc6 | recDSVIzICBuYVHkf | recjoIRkZGGkHgHpL | recTijaTM12tLldv6 | recJ8xz2Tr89nfAxP | recwzr32oMKtHtpTc | rec4CMbSpAztl888Y | recKh4ldy1w4H7IVx | rec4dGUQSfmi7JZWt | recKRSyV8Tfm5JCXD | rec3g9iEWEyZjPwTY | recbwgPyZ2nz4Rba1 | recfjx2AuEmh3SiKN | recFquE4nzo9p3gUf | recN8Puzhwufr4WhT | rec7yW11v1aMLua4Z | recDMOerkK4rJXif2 | recKsSmV3ZkwCtJcT | recS45QePJTTU7nhQ | recP6F5d8Gs0dZQyY | rect7CDvSqbzDCnhT | recR2w7PlRWCCqkco | recStfjo99BX2272R | reczLAyUPFFA7SMjz | recmBBpxNCACi1yoj | recucjLFvJBeq2SId | rec6HVx8J07VeD2q9 | recretXLeABT54zOj | recSoH8gStsBfG4tc | recYcuppT6ZRGp1QI | recexL4UK4r8mkSYS | recdBSnw5BftMKxgN | recREK2QUCMY69p1d | recDUyZkTxGe4whaQ | recIKGqhafdLTtcbL | recnJTNZC13KiV8PZ | rec0EI7qnp1kNyVA9 | recYJEUax3wmGqqvS | reccNYg6YqpiSjTNe | recM3XHMGOdZAKNAa | recqAeGz7Ne9aJi62 | recTrRTS7t4CPc4F6 | recEzlkyUvRt57IWz | recdBzQoUds2hxRlz | recI7LEr6qwJeECzm | recL4Vi0P6nUdqHZr | recNQNBBNblL2YwlJ | recl0LRFwMRzCrFQK | recjfYlQKpVaL43xM | rec65gTN44crXsbSL | recrSODbN4sBu05IV | recfmb97lAS4ns8Id | recfkVypCc3c3qr6q | recVzUIJcMq4VQ2rn | recFKC1m1SHRjTNTU | recSd7lYDYIoa69Dj | recAMinfMW8LmFTb0 | recFaT4Yqz9QWrWoB | recpv7PKL9jccDKFs | rec1NLilhk8YVYIG5 | recXtM3HhG4rfSt6i | recF3braTfe0wGYZE | recvkcZNWf3qTkOT7 | recX7pZSSFuP5ncUw | recGRxeUXKZ6JQUav | rec7TPmnZE6NdEBqX | recpILDzKt9r59Aa1 | recdseSkPYdY4gkMl | recIzKPvbRkuLBXa4 | rectxVoOwPo6iQFze | recV4oUjoeoIIDapD | rec7hKCaiugF0at36 | recyHOHjvPTKriK2Q | rec621ZNjfkNVhMlW | recbNMRBomE43uiNb | rec7RAkrIiFtJQJea | recLugszI01AxXGve | rec3CG0TTgwhP6Hk8 | reccvEWLqbR85SqVA | rechrW4Lk49INL1G4 | receMVx6kulDTlLFS | reca62X1TgNm3Wk0j | reczAqZB8JhuILt6N | recOwTxvJw197fVxL | rec2FcbKO4v7TL87V | recLJxVmbBBXMk0Pg | recO7fBgrhxFwIQnG | recAUkBh1Zm1GnwSm | recu0iAs9Lwr3ad8C | rec7CKlVEmCHBv3Hv | recnOzxjUQPlmJenF | recBpttVjayZZjsEh | recMhkJyr2f5h7C3v | recnG3IpszqMBsKqX | recM4sdOOBRQwbuzh | recgqdVOVq7GuZWrS | recZ4hlSzK09mhzwn | recvdEtABecFFGuX3 | recMV4Y8V5f6L1d7E | recbTZDOLs58NoRsD | recfOzJTvrCpWajgx | rec7qCdQ0xHApZ7rl | recYuQYPLJk0DVQsB | recSDLE4nmoF2w8LJ | recCsLg7KkA4qtQvw | rec6wvw5wmJX7jOil | recxkVVtSL6sk0uK8 | recszLSjdBWmmGmbN | recoYrQD9O3BtceAo | recxRD43t4t1pbTpM | recT8jqu8rPCKAC2X | recdsZI6x8IHwWyrD | rec6Q0DZSpOvK4Lod | rectHCyVTx2zEBbH7 | recbwnwoUmFevMcbQ | recpfQkEeKZT6pnHm | recl76BoPGI6moV8x | rec9LWrfol7tF4yKY | rec7bJEQQfEgjUHIc | recYFqNM1TK5jrZKO | rec5HSnORw5LOAOjr | recO0pZtRVge40BaK | rec2848UL83I1MxRs | recAUPzEc9jWG5UDv | rec5XzE2fhzp850X9 | rec3PNOF9sEcsGkkW | rec9aXzgdT8vVNeJO | recOw70jwmHZwrsvA | rec3yuqpOQbw9tGRH | recu3O6eltoJNjcpT | rec6WwONyyFOnfuy1 | rec71IcuscvvdaTjq | recL4gYxX2hDRaXe5 | recvEGA8UGQbcQYTG | recz6yiolLhvnfOVX | recYwnJpFbx4qZ76P | recZ6VYFMrZ2V97MB | recHeNvfEnnOpmrv7 | recYw4xgwtSq6qevT | recuuIhvjY7Prishv | recuBfT5UISZxm8ml | recjdtG6YA3kZFP2s | rec9hocUKVM5VIt21 | recUK77TRPXsNk0mS | recmewSZbEpHz2OWt | recgtTAGxv9Gy3JYb | reckvRfexHA0fTRCY | recOGdnCI8Nm64bKB | recjpeVY6u612AlVH | receNdUyIVx5GTUuB | rec01qXAQZaDLgruk | recjDvsfaRHNvK2NQ | recWkUyglQ4VL9G9d | recmlnHl7hVBRzLbb | rec7JDz9F5uc6Zdlt | recpmA20qmxdP5fCf | recjxxnUoyvJE6kjP | recyIGnPYVy8l86wT | recx5cvqcteuPDsL6 | recKznWh8PxVF1hpW | recqwQlt2M83HCXCH | recjDJxOFqFMDtUus | recKmx6qhVDCxYUQC | recTYDoBBllaZZ9x1 | receKAyi1F2GCth5Z | recBjxggaPtE2YGrB | recXSM6MB3FTfSvfD | recOFrxrJIQb4AY9L | rechj2I7DGtnHHvif | recj2dCW9DY5PmTRS | recEaHbdYWgbxJpHH | recjBrCKOx3056i2w | recFyLPIYJdS80pOX]",
             "[rec9DIY3aAh3dOxaq | recMn9OQg1oksktxY | recj6AE2ZoAaO5sle | rec4eSsh8xAn169PX | recksI0vrXijL9CyF | reciTrWup8gfV83lg | recwUegRTnwuqLB8b | recVqeUrC6zFOAqmT | rec05I5SmieRNehac | recFbGsAe8kRfkiOi | rec5ABM4u2MsEn1sJ | rec2D0bT8C9SdNF52 | recvQmDiNXSkyQXma | recxEBgGVt7MG6yqq | recMMHwZXSX0fijGP | reciTsz1HFb2UtO96]",
-            "[rec0l9gCr7T9dvHgr | recsvIooStzS2LRWV | recAeQ6xPdd0sxPNA | recnLB51j6TnuDjVy | recNPi62xg3F1nJDO | recHTSTn27edCbCJI | rec37oysaNWHigznf | recJbmp5GNPUOcOhr | rec3PgzWxtYK79JHC | recam4Uyoop7jVCNn | recX0WejSLa9JJhOG | reck0rAITSpziMaDr | receY7fOnGZVDYOxA | recCQBv7mZKstwQeF | recSjhYXdnelRD3Cv | recjpd9seacCq9v8c | recj9XaWBGIae1SD6 | recNO1Cmjkf0FWv6g | recICVzfHBvnON26s | rec0uP4UH2IQ38Pos | recHvSMt9CpkYNpnv | recU1m15EUUOPWEvj | recB3AMA6JWxmESog | recGKNUbNaNB6BeWd | rec6Vynbjhtbg9Uy2 | recn4Vhavk2RMIvFw | recDLvLF1kXzfeDI5 | recO2vlTVbegsBccK | recboLzifJ4PRO8W8 | recbxQAs8FDRqq2nk | recvfBvxfQWsdhlAc | recCUOuvDdMZhk5l3 | rec1Ys5XcsHDCs0TB | recTuEpdbqyKOYI7D | recvrX16uktlyBDfr | recKiu4GiLrDfNQoG | recLzK28i22Z1MgZm | recew5n42fOKR6uIy | recaM97wInLvYVy6a | recP8N8p92d6rrpxt | rechVsrK5SjJN5h3N | reczWM1pumags1Hl2 | recxnoBm7FpAxzBOh | recYQVKQwUKP3j2U4 | recNfI9gSIFSqVCdj | recKDcCNDHEUP4mgJ | recuhOx9yWkP4DG9V | recd9WBvLLGFVsJJc | receDTDb4YqZOHzhF | recXk3Aq0aFqxZqzh | recB3zgf1G1turGtI | recvND4WaD109eBFl | recXMTJhj3Dq4dPDv | recrDWql5s3lgzU4t | rec4GHQqVzzq9f5ne | recKt0r46qSlas9j1 | recQ1ccQ4V7pgLleK | recX2GM3WIGYO7hmd | recIWGcuE9Y46f82T | recD44uVZnNIBO0xc | recoqhkKMNnSAnCIm | recnlSM6cn7CvFQ8p | recUdUIG69tmrLBiO | recr4sKBQCcl3llNf | recl4gA2bppQLdib5 | rec4P8nXWEwCRquIj | reccZk98G7anlomyT | rec4oUB1tcUeMDEIK | recaRsnVfcBmoJllE | recPFjjWryjVvO2xP | rece4oSluWgjDwNZz | recm2qrxUNVFXSYg6 | recXtxZuNj3LKt4xv | recIUd6cuu57h5eHH | recymR6pO5pV3vDkF | recUADQNqM6WoMNQI | recnOqum2Fki0suE5 | rec6wQ0odOBOzCLQl | reciJCRKqFq5QYox0 | recNWC0aL1FP7EcY3 | recNnVZqZjE24qSIZ | recc7qp0NMfUBnWls | recO5UG5C5A2je5gw | recY11zrqYut4bwB2 | rec2XSGVQMgZf9XRF | recvue2k9mAfWMHKU | recx6s1zcX7MGKJbh | recl9SVMj3SskKDBh | recVxqH7zQeVmfKo9 | recpzrHS24eICojhy | recTTSSL80BW2SP1t | recFtjmxEWHoCsfMt | rec5f0Lw38hPa0Zrt | rec1FH0gqCUhSVnbO | rec0QjI7cBO8e8KFE | reckif8amxOp5CcmT | recQ9mpJRLM9ai0Zf | recJEsx2TXOrNZhkk | recSxZ7paKbkwkpNy | recyxPuUdEMd4V8xY | recnl0HtWWWZaAc7R | recKxS7wUmd74YIee | recrrJyBVwqQBBSMh | recVYEJBDga3pBAj0 | rec2KmPXw9BXj9JRk | recPlxXRMYYCHvet2 | recmJRjCnmmTfG5Fh | recx4AcGClu79a1pI | recZMOlFNXkDcevrQ | recuxVZDp6p9ICrvN | recG3tDNdpLKoFFZj | rec190ZVVsHpUQy7t | recOJP7cyvvmDfayf | recxd17GFpSoocTX2 | reclapCAIQHueIyjW | recCv0rfu2Lynj2aE | recygTGeJvvBWdw7h | recYGa90EpTEhpgO9 | recuAQ20HXp891Afb | recmrHdxd4zbOwAjk | recGU4F8XYB7NhmHB | recin5SbEGcsbfOR2 | reccHdArlUZMV6efC | recjIE3D01dNbPZok | rec8oIZhaOakaROCZ | recmhEyu7bAj5DYKk | recJtFPhErRUrMsv4 | recgaej67G2RGywod | recolODRIRD8mPLCM | recIxS4QSNUiqjz70 | rec32Z2Ye3r34htmK | recGNrXyEdBcaCOo3 | reczLXVeyelbNtiVK | recr4yeSFdDoecp3V | recegYrCUHKpiXvDR | recdBjIukoc9m48a6 | recyay6HUsNpMdNrs | rec7ApoyITlqnI2tS | recKwrE9WsCn4px2Z | rec51dhlSnD15XEAP | recrvUGoIsYv5X8oF | reczIpGtXz5bvQFxu | recwgXdctOIb5vkZa | recOXMAwPAUvcI9ss | recXo76788D5g1Aem | reczjzZiTIOkTFiyP | recRk4FGTBNOgNkFV | recXQH5OnOrfydg1H | recPPAFWpcQUFXXVt | rec3lhW8AzKlopkqQ | recZCkPl1CkDh5gAg | recd14IbgJw9qL7xo | recdcM1mkwPGAzza0 | rec9qFMDCRHynA3h3 | recCzrxogFYnFpxGB | recc6OzUXw9KfYqZN | recYWYKeCdkhH8QFX | recapvxY6Wms2Khqv | reciDYpYilDYeGcPz | recXFxIKrFpQ9epHa | rec9gYirfo1JB6iMH | reccF7y9dxtTmS8Bc | recK8woBy82gk9bA0 | recBob5U52Yvzcu2H | rec9tMhDLgt9ISSM4 | recOzpT7aFhDkGRae | recGTBDgFofr35r3l | recaPLNALuc360jv3 | recRpeFdKigcom5p3 | reczBNkBd1AsHjCul | recnZiJcJlXdc1zNg | recBoxfzihHdw9x9P | recdDzcibceYBoVAZ | recGuhk5oIrHj5wN2 | rec5GhApBmf88etOi | recxo0moNG5xJsI1Q | recWHgna264HFeROK | recVp4xlvoaGaRDNl | recTh6cMJmengva41 | rec8yhJvsun711dSk | recvLWGVUWkwZLIO7 | recAaNKOGLExJkui3 | recyhRct7S3C7Auxo | recmadpCvrENtizEt | recCOzdUgGMTBAunn | recHLct2wbspjYQFV | recPHmgwmTTWR81yw | rec5QWs6pBGQIubMd | recYKCQfiz2tBKqBo | recpFClNxxr5HvtPN | recseSB9w5uuOGBTe | recARW5jTJRREOaCL | rec5W10a0fZ9ys2nF | recCnYIjOcStK6exZ | recU0lKw5VWecqLLw | recLZTKiVex1cqiwN | rec8vq5LVNt9uFRLo | recWmY2JnYJ3IeWkc | recxrmCiuo1b3oPRV | rec3ym914L8TSt736 | recCZa8ZxNvbhzpev | rect4CI2WjROkyeV4 | recnk13yDPZuUBP4G | reckRE7MixuEPF1sC | recRJXNPfKt4odXzP | recy6IPxVItk0dJXo | recus9rb4Lwd4SWlm | rec5Pb5Oq10gT4VRu | recguzOfZ9Irb1B2f | reciZDOmvRVbtoluG | recumEuIwdM8uhv8G | reclTEZiuhaFttcPu | recsbk0K3OWNcHKFv | reciIVLcEG2NKdYOx | recjk3OzOlTMQNepG | rec40GgxWlXSqX0dq | recPmEJm53bwgPrwz | recPW9WVxrNSnE2Bu | recvqn7pzJZVyNslf | recERbA2H2WAakCME | rec94Vpx7E8q2stLj | rec211LvBHsIUZgDQ | recMZjoN567spXa9U | recIcic7sKXlHVJ41 | recWf0ohvDiI4UkmS | recwmQjR0BVardCRp | recXYK0mXWK0DsgDB | recUWAZTboEnzZhxO | recjzBLg2aq4TQtcW | reco1M2fYasmCG9WT | recrgTj0mwaTXXodt | rec0cCqfPFK6IWX8z | recU330LEtbmM24r8 | recgo5F1BxhTs719k | recEMoEcYV6BmR3AU | rec7xB6RxxL3EgEwi | rec48mVHVSvmTFqKv | recAp0cj39zdlGUy6 | recucZsH7RTJ2hzIU | recYNKqqvGuKWX3di | recvVDHnkZxHiD6J0 | recgOCUU34XitmMWU | rec75LUpGX7wOqxxu | recG0F9nG27t8IJ82 | reca89ZwAPeWghKUi | recJPFMM4EvZm2jNw | recgpEokbDfhHO4JF | recaVbqElVPjCbUTb | rec8Fxgt5rw6X8wSZ | recMc8cykAu2IOcpi | recZSvS65J1cK3gkY | recCxhjg3z59qazMP | recsEVTkaz6QhqdVQ | recVkA3rVHblgxghO | recMmm654MFowbFwZ | recfMDMIkJ6wXjRPo | recdWWR6CyAmCkC4m | recjT4LCCZuBKnd1P | recOLJB19mHMtbecX | rec0iyU1zps6FswbA | recP4DlRg7fSIdF5S | receBZrKBdMRow51Q | recNTvcpToJDM3trl | rec7MY4OoIZnblPIc | recJS4n9cWX89XGfk | recBMhAoW3r54S35q | recVV3Zaroblw4CTT | reckNpTM7YsxjE5Mg | recwMkAlAAzWCDOn1 | reczGyKBYbkQ0jER4 | recNfd5ttkDkIxc19 | recqsdyjvGwJawWXN | recqMTC8FhL3WmrlI | recD0Pe7J8XfxM1ff | recsEmLDTNydw86mM | recZ8L2hMf0w4bpBa | recDnGfhbWbs6kq2a | recnuM3nMOFhLWjde | rec8Oj1GFRB8MoaoD | recre4mb9K8SalLQy | recnCinFZp1XMGVgl | recigzqyaQK1fyp8k | recbxYWDwfxSJs3YG | recSGYJrT2m43DNN5 | recHZ0yFnEWLDscNl | rec22o0DUpUZ1WaAd | recxzF6vqlByk4jQ7 | rec5YnDJhUPUtbBhE | recaKSuxEkU65VZHp | recYtggRLDAI4k0yO | recH9cUNtLlv6OBuR | recwglYMNBQoWV2d9 | recaGFUvLJbA8riX5 | rec781rMaX36fhtuR | recL633oryyrVdX7H | rec51AYNRpyn6sMst | recbqTqS7N50ajMbk | recQbPIQURBcDlW8U | recRvyUlWqEse0azD | recdEaz5bIrSwHF8C | recumIQMFYA9GRA1Y | rec4ZuscYvgtiUtg7 | recDbAOp84Ss4wE0Z | recVMNhsb3RTtf2mS | recbn7kiCn5qZjvrx | rec8Pum6Drs3fmvvp | recEj0R1VF1WNn2KK | recfB0TBtOHd6fR24 | rec61bZBOjGJRPOdY | reckpO2Z6oniomUtm | recI1KGC6Eu2EorLy | recciQr1ou2SjLM3T | recQY1cixGomx0kZC | rece5Llo7k4316655 | recxgg9lvt6Ws8fkm | recJYb5jknDYB9HYc | recNoFXAvwNBJQRbG | reclM3Rkmv7SYt7eh | rec8vVkBR709U9o26 | recDWU3znl22Weii5 | recryi9gqE7MzBxK4 | recjxUHdCU4PP6mes | recu4tfifuSOgmpj4 | recygvKkb0SJAWvWg | reciAVI1aVbTf7OOo | recUA4FZcLjwKBtdX | recR2kUgJHgWapzGW | reckqdCIH63uWFEOA | recOEJAMTyrcRWNDb | recSXlMwGHMPYM0kk | recuDBx5CESoN77Mk | recyZn49FT9k3VSg2 | recu7fhjEn7GugC6W | recmXYD4maNgzXepU | recXP07qBdOViqiQS | recDZCjI5n6tz2CxP | recCFor1ciT5lra8T | recy10ueYhHZq3HZl | rec6VAFVVNi7FJjtx | recGuub5oKQQZxLX0 | reci1WTvbEkiOEkEc | recI3XAWW2eVLG8rb | recdij3hr5OSfChCc | recq3HP4rNc7bIV3m | recExJacBJPRLnOKd | rechsFW2VDyB2YcSl | rec6v1dsI394o7kig | recEcDyK0IAG0ETAr | rec0U9xbnNsaCeswz | rec7sOnfzpvqf3AN7 | rec38WjMJmIKhrcdw | recDAca8HMDCvkhvB | recp6PKtvPQtGSvq9 | recaZY1iaS7SrIiLh | recDd7AUNnF7FjfcV | reco7gHQW3PS4fiCL | recsuGFr23uTiHUsY | recHlif9aaJzGaQmS | rec1Hn8CkRZf3YOYO | rec3ravHzTLf1TqLq | rec0sTrkt606MVRno | recjsakPM9Dl0QDi8 | rec534uZIrFEKIjTz | recJgzWpDXNBJoJAu | recvwTRvdLn6nBHFy | recfVs0PVo5sphR2A | recAaRRvv6M7aJlOU | reckICfo6Ls8QnEqP | recBLJHgVkVhRmtYW | recGtoWGWumjaX10U | rec0mdarg3SSnSUi4 | recOAtTQm4c9HhdJG | recX0ir3EMGBJ8gGB | recY6eWb4FxBs7H6G | rectIWbPc9O2tn4l7 | recXp9Z7HCgZelxtx | recKhzjVck17Rc81f | recz7XZ7kOscGhL40 | recfIatNXEg1AVUTC | reciYe98cUNeMTLQ0 | recoerXl6MPMLfv9r | recMbuTdUlpUG5UTi | recm3kH9ovGHHSane | rectPUdjOP1Bn5Qwh | recJ8KnLeUj3mRfit | recDeJ3ae4uYQzMuv | recG0bZ2X30VRS5ty | recN1aPv6KU5GFy5z | rec0BeDbzR9CaFUQd | reczjDRSWNope5RaN | recMDKYXcW5s92aYS | recOTckPH1wYCWTIJ | recwFtyY3I7LzpZpN | rec3Zlv2uPDVxfzTt | reckCnKh81koapTRW | recTJqGy4UZj5h7cZ | recazmmzra80a9tER | recUpBnjChY5ZO3sR | recdTh6JSldNu2ViC | reckbZh8VUDuhe4tf | recEzwkPqFDtOmkHP | recqG0m0OgKugjcw2 | recenmybkA3rCZvnz | recVcc7hrJBmLuvfh | recHhrj8vvWNFHF63 | recTiDDssTaEfn4ZV | recDF3wMZlKyu54ZI | rec8lItQBW1xnT1vb | recTtC9TG67XRdTf3 | recLOGFz5scBXynLj | recTiRBEtPBcuGDTL | recjL6wjPxKXHPXWK | recX00yon4cbjTQki | reck6GB6qDzcUP2zP | recNkoH9M9EkbnmvU | recjVgEOQMg23wOLj | recrpI6cN0v0a3I4e | recNiKlKINWsFwhN5 | recKhMPYODUGRBDro | recphQNdMqiCwZJRA | rec61OxGwoT9nc4Qe | recY3BGpUlQIEaKRr | recQ3qVkvUs74TaXh | reccZR6zME2thmAsk | recE5R4vTJ6SfVYL3 | recp6q5z1K3AvZA9V | recrdKexrcMLcL36q | recWZM8rMKQDtq7h3 | recfTTbKiS1vXiIOT | rec5LLrc1EOOKfkcE | recsQsB9zL2XMnox3 | rect0yD9gQCDA729f | recfdjhiib507nenq | rec6yvn3iWg5JVAAM | reclLnJpFqdC4WpbV | recvcWSlm6oTxBjh2 | recFlEpUkahGWZ471 | recspz8UNlWGJj4IU | reclUFKISJzBNDRXB | recndKIQVDTgY501j | recTLUJ9rHuVj3YIP | recoqFzG1xjSK0PQ6 | rec57Kep9mzf37q5C | recHCr8UOabvf8wlS | recvTmr05mD8O6iGf | reca7DIKQeauF0OeK | recWFa9nKChFXfBbi | recaMtaYR8R01CVn1 | recnoKo3WQnEN65yt | recgy02VlIX30SYv1 | recrui9LgP17IQe0Q | recMT2AsHjCBBATvZ | recMX5qnQtcnvFLx3 | recFRsypsYpw0hTAd | recfYKlqq0iNblCju | recbidhP1scYfSgBp | recP6ilWqrcWoTyA2 | rec4CS6qjoFtDvHqE | recdat7nwsD9Xr4xY | rec4COodXlvxei3sP | recO2cKsuBMDv3lwn | recIXse0lhSDDkXn4 | rec8dR9dVQ4Dy5zht | rec7jAGTyIbIOrAFR | recRvoF8JCf6euUEg | recfSpoSRvSqF2N8b | recCWCh1YOrcBpd6A | recuvRm52e3WBrx8y | recOfkHRnRMyjFEe5 | recbV4Osa4phGswZ3 | rec5R6ftDae9DadiY | recQHwBQHb6x2xDtU | reckbiOo3NPRGUPG7 | recUL9VWccFSBT4em | recTeqN2YBIPUT9wK | rec97P3MsdlMYtw4Z | recllNm0VhmWSwaAW | recBSk2Gc8q4zXulh | receBCi9D2ju3mk4P | recZPobZTYkeHQzfm]",
-            "[recAy4kB4u5Mh4G82 | recP1mgGzbUVbrIGK | recp7r6Y2EkSzel2e | recL8dZRR1lSwam4j | recc1eKOtazTRtJQG | recMbRMTJ4c7G4YyH | recC0ibJdFQa4yCOE | recLGQ1cZAVd1bo1V | recRQtj4mqpmlTaNE]",
+            "[rec0l9gCr7T9dvHgr | recsvIooStzS2LRWV | recAeQ6xPdd0sxPNA | recnLB51j6TnuDjVy | recNPi62xg3F1nJDO | recHTSTn27edCbCJI | rec37oysaNWHigznf | recJbmp5GNPUOcOhr | rec3PgzWxtYK79JHC | recam4Uyoop7jVCNn | recX0WejSLa9JJhOG | reck0rAITSpziMaDr | receY7fOnGZVDYOxA | recCQBv7mZKstwQeF | recSjhYXdnelRD3Cv | recjpd9seacCq9v8c | recj9XaWBGIae1SD6 | recNO1Cmjkf0FWv6g | recICVzfHBvnON26s | rec0uP4UH2IQ38Pos | recHvSMt9CpkYNpnv | recU1m15EUUOPWEvj | recB3AMA6JWxmESog | recGKNUbNaNB6BeWd | rec6Vynbjhtbg9Uy2 | recn4Vhavk2RMIvFw | recDLvLF1kXzfeDI5 | recO2vlTVbegsBccK | recboLzifJ4PRO8W8 | recbxQAs8FDRqq2nk | recvfBvxfQWsdhlAc | recCUOuvDdMZhk5l3 | rec1Ys5XcsHDCs0TB | recTuEpdbqyKOYI7D | recvrX16uktlyBDfr | recKiu4GiLrDfNQoG | recLzK28i22Z1MgZm | recew5n42fOKR6uIy | recaM97wInLvYVy6a | recP8N8p92d6rrpxt | rechVsrK5SjJN5h3N | reczWM1pumags1Hl2 | recxnoBm7FpAxzBOh | recYQVKQwUKP3j2U4 | recNfI9gSIFSqVCdj | recKDcCNDHEUP4mgJ | recuhOx9yWkP4DG9V | recd9WBvLLGFVsJJc | receDTDb4YqZOHzhF | recXk3Aq0aFqxZqzh | recB3zgf1G1turGtI | recvND4WaD109eBFl | recXMTJhj3Dq4dPDv | recrDWql5s3lgzU4t | rec4GHQqVzzq9f5ne | recKt0r46qSlas9j1 | recQ1ccQ4V7pgLleK | recX2GM3WIGYO7hmd | recIWGcuE9Y46f82T | recD44uVZnNIBO0xc | recoqhkKMNnSAnCIm | recnlSM6cn7CvFQ8p | recUdUIG69tmrLBiO | recr4sKBQCcl3llNf | recl4gA2bppQLdib5 | rec4P8nXWEwCRquIj | reccZk98G7anlomyT | rec4oUB1tcUeMDEIK | recaRsnVfcBmoJllE | recPFjjWryjVvO2xP | rece4oSluWgjDwNZz | recm2qrxUNVFXSYg6 | recXtxZuNj3LKt4xv | recIUd6cuu57h5eHH | recymR6pO5pV3vDkF | recUADQNqM6WoMNQI | recnOqum2Fki0suE5 | rec6wQ0odOBOzCLQl | reciJCRKqFq5QYox0 | recNWC0aL1FP7EcY3 | recNnVZqZjE24qSIZ | recc7qp0NMfUBnWls | recO5UG5C5A2je5gw | recY11zrqYut4bwB2 | rec2XSGVQMgZf9XRF | recvue2k9mAfWMHKU | recx6s1zcX7MGKJbh | recl9SVMj3SskKDBh | recVxqH7zQeVmfKo9 | recpzrHS24eICojhy | recTTSSL80BW2SP1t | recFtjmxEWHoCsfMt | rec5f0Lw38hPa0Zrt | rec1FH0gqCUhSVnbO | rec0QjI7cBO8e8KFE | reckif8amxOp5CcmT | recQ9mpJRLM9ai0Zf | recJEsx2TXOrNZhkk | recSxZ7paKbkwkpNy | recyxPuUdEMd4V8xY | recnl0HtWWWZaAc7R | recKxS7wUmd74YIee | recrrJyBVwqQBBSMh | recVYEJBDga3pBAj0 | rec2KmPXw9BXj9JRk | recPlxXRMYYCHvet2 | recmJRjCnmmTfG5Fh | recx4AcGClu79a1pI | recZMOlFNXkDcevrQ | recuxVZDp6p9ICrvN | recG3tDNdpLKoFFZj | rec190ZVVsHpUQy7t | recOJP7cyvvmDfayf | recxd17GFpSoocTX2 | reclapCAIQHueIyjW | recCv0rfu2Lynj2aE | recygTGeJvvBWdw7h | recYGa90EpTEhpgO9 | recuAQ20HXp891Afb | recmrHdxd4zbOwAjk | recGU4F8XYB7NhmHB | recin5SbEGcsbfOR2 | reccHdArlUZMV6efC | recjIE3D01dNbPZok | rec8oIZhaOakaROCZ | recmhEyu7bAj5DYKk | recJtFPhErRUrMsv4 | recgaej67G2RGywod | recolODRIRD8mPLCM | recIxS4QSNUiqjz70 | rec32Z2Ye3r34htmK | recGNrXyEdBcaCOo3 | reczLXVeyelbNtiVK | recr4yeSFdDoecp3V | recegYrCUHKpiXvDR | recdBjIukoc9m48a6 | recyay6HUsNpMdNrs | rec7ApoyITlqnI2tS | recKwrE9WsCn4px2Z | rec51dhlSnD15XEAP | recrvUGoIsYv5X8oF | reczIpGtXz5bvQFxu | recwgXdctOIb5vkZa | recOXMAwPAUvcI9ss | recXo76788D5g1Aem | reczjzZiTIOkTFiyP | recRk4FGTBNOgNkFV | recXQH5OnOrfydg1H | recPPAFWpcQUFXXVt | rec3lhW8AzKlopkqQ | recZCkPl1CkDh5gAg | recd14IbgJw9qL7xo | recdcM1mkwPGAzza0 | rec9qFMDCRHynA3h3 | recCzrxogFYnFpxGB | recc6OzUXw9KfYqZN | recYWYKeCdkhH8QFX | recapvxY6Wms2Khqv | reciDYpYilDYeGcPz | recXFxIKrFpQ9epHa | rec9gYirfo1JB6iMH | reccF7y9dxtTmS8Bc | recK8woBy82gk9bA0 | recBob5U52Yvzcu2H | rec9tMhDLgt9ISSM4 | recOzpT7aFhDkGRae | recGTBDgFofr35r3l | recaPLNALuc360jv3 | recRpeFdKigcom5p3 | reczBNkBd1AsHjCul | recnZiJcJlXdc1zNg | recBoxfzihHdw9x9P | recdDzcibceYBoVAZ | recGuhk5oIrHj5wN2 | rec5GhApBmf88etOi | recxo0moNG5xJsI1Q | recWHgna264HFeROK | recVp4xlvoaGaRDNl | recTh6cMJmengva41 | rec8yhJvsun711dSk | recvLWGVUWkwZLIO7 | recAaNKOGLExJkui3 | recyhRct7S3C7Auxo | recmadpCvrENtizEt | recCOzdUgGMTBAunn | recHLct2wbspjYQFV | recPHmgwmTTWR81yw | rec5QWs6pBGQIubMd | recYKCQfiz2tBKqBo | recpFClNxxr5HvtPN | recseSB9w5uuOGBTe | recARW5jTJRREOaCL | rec5W10a0fZ9ys2nF | recCnYIjOcStK6exZ | recU0lKw5VWecqLLw | recLZTKiVex1cqiwN | rec8vq5LVNt9uFRLo | recWmY2JnYJ3IeWkc | recxrmCiuo1b3oPRV | rec3ym914L8TSt736 | recCZa8ZxNvbhzpev | rect4CI2WjROkyeV4 | recnk13yDPZuUBP4G | reckRE7MixuEPF1sC | recRJXNPfKt4odXzP | recy6IPxVItk0dJXo | recus9rb4Lwd4SWlm | rec5Pb5Oq10gT4VRu | recguzOfZ9Irb1B2f | reciZDOmvRVbtoluG | recumEuIwdM8uhv8G | reclTEZiuhaFttcPu | recsbk0K3OWNcHKFv | reciIVLcEG2NKdYOx | recjk3OzOlTMQNepG | rec40GgxWlXSqX0dq | recPmEJm53bwgPrwz | recPW9WVxrNSnE2Bu | recvqn7pzJZVyNslf | recERbA2H2WAakCME | rec94Vpx7E8q2stLj | rec211LvBHsIUZgDQ | recMZjoN567spXa9U | recIcic7sKXlHVJ41 | recWf0ohvDiI4UkmS | recwmQjR0BVardCRp | recXYK0mXWK0DsgDB | recUWAZTboEnzZhxO | recjzBLg2aq4TQtcW | reco1M2fYasmCG9WT | recrgTj0mwaTXXodt | rec0cCqfPFK6IWX8z | recU330LEtbmM24r8 | recgo5F1BxhTs719k | recEMoEcYV6BmR3AU | rec7xB6RxxL3EgEwi | rec48mVHVSvmTFqKv | recAp0cj39zdlGUy6 | recucZsH7RTJ2hzIU | recYNKqqvGuKWX3di | recvVDHnkZxHiD6J0 | recgOCUU34XitmMWU | rec75LUpGX7wOqxxu | recG0F9nG27t8IJ82 | reca89ZwAPeWghKUi | recJPFMM4EvZm2jNw | recgpEokbDfhHO4JF | recaVbqElVPjCbUTb | rec8Fxgt5rw6X8wSZ | recMc8cykAu2IOcpi | recZSvS65J1cK3gkY | recCxhjg3z59qazMP | recsEVTkaz6QhqdVQ | recVkA3rVHblgxghO | recMmm654MFowbFwZ | recfMDMIkJ6wXjRPo | recdWWR6CyAmCkC4m | recjT4LCCZuBKnd1P | recOLJB19mHMtbecX | rec0iyU1zps6FswbA | recP4DlRg7fSIdF5S | receBZrKBdMRow51Q | recNTvcpToJDM3trl | rec7MY4OoIZnblPIc | recJS4n9cWX89XGfk | recBMhAoW3r54S35q | recVV3Zaroblw4CTT | reckNpTM7YsxjE5Mg | recwMkAlAAzWCDOn1 | reczGyKBYbkQ0jER4 | recNfd5ttkDkIxc19 | recqsdyjvGwJawWXN | recqMTC8FhL3WmrlI | recD0Pe7J8XfxM1ff | recsEmLDTNydw86mM | recZ8L2hMf0w4bpBa | recDnGfhbWbs6kq2a | recnuM3nMOFhLWjde | rec8Oj1GFRB8MoaoD | recre4mb9K8SalLQy | recnCinFZp1XMGVgl | recigzqyaQK1fyp8k | recbxYWDwfxSJs3YG | recSGYJrT2m43DNN5 | recHZ0yFnEWLDscNl | rec22o0DUpUZ1WaAd | recxzF6vqlByk4jQ7 | rec5YnDJhUPUtbBhE | recaKSuxEkU65VZHp | recYtggRLDAI4k0yO | recH9cUNtLlv6OBuR | recwglYMNBQoWV2d9 | recaGFUvLJbA8riX5 | rec781rMaX36fhtuR | recL633oryyrVdX7H | rec51AYNRpyn6sMst | recbqTqS7N50ajMbk | recQbPIQURBcDlW8U | recRvyUlWqEse0azD | recdEaz5bIrSwHF8C | recumIQMFYA9GRA1Y | rec4ZuscYvgtiUtg7 | recDbAOp84Ss4wE0Z | recVMNhsb3RTtf2mS | recbn7kiCn5qZjvrx | rec8Pum6Drs3fmvvp | recEj0R1VF1WNn2KK | recfB0TBtOHd6fR24 | rec61bZBOjGJRPOdY | reckpO2Z6oniomUtm | recI1KGC6Eu2EorLy | recciQr1ou2SjLM3T | recQY1cixGomx0kZC | rece5Llo7k4316655 | recxgg9lvt6Ws8fkm | recJYb5jknDYB9HYc | recNoFXAvwNBJQRbG | reclM3Rkmv7SYt7eh | rec8vVkBR709U9o26 | recDWU3znl22Weii5 | recryi9gqE7MzBxK4 | recjxUHdCU4PP6mes | recu4tfifuSOgmpj4 | recygvKkb0SJAWvWg | reciAVI1aVbTf7OOo | recUA4FZcLjwKBtdX | recR2kUgJHgWapzGW | reckqdCIH63uWFEOA | recOEJAMTyrcRWNDb | recSXlMwGHMPYM0kk | recuDBx5CESoN77Mk | recyZn49FT9k3VSg2 | recu7fhjEn7GugC6W | recmXYD4maNgzXepU | recXP07qBdOViqiQS | recDZCjI5n6tz2CxP | recCFor1ciT5lra8T | recy10ueYhHZq3HZl | rec6VAFVVNi7FJjtx | recGuub5oKQQZxLX0 | reci1WTvbEkiOEkEc | recI3XAWW2eVLG8rb | recdij3hr5OSfChCc | recq3HP4rNc7bIV3m | recExJacBJPRLnOKd | rechsFW2VDyB2YcSl | rec6v1dsI394o7kig | recEcDyK0IAG0ETAr | rec0U9xbnNsaCeswz | rec7sOnfzpvqf3AN7 | rec38WjMJmIKhrcdw | recDAca8HMDCvkhvB | recp6PKtvPQtGSvq9 | recaZY1iaS7SrIiLh | recDd7AUNnF7FjfcV | reco7gHQW3PS4fiCL | recsuGFr23uTiHUsY | recHlif9aaJzGaQmS | rec1Hn8CkRZf3YOYO | rec3ravHzTLf1TqLq | rec0sTrkt606MVRno | recjsakPM9Dl0QDi8 | rec534uZIrFEKIjTz | recJgzWpDXNBJoJAu | recvwTRvdLn6nBHFy | recfVs0PVo5sphR2A | recAaRRvv6M7aJlOU | reckICfo6Ls8QnEqP | recBLJHgVkVhRmtYW | recGtoWGWumjaX10U | rec0mdarg3SSnSUi4 | recOAtTQm4c9HhdJG | recX0ir3EMGBJ8gGB | recY6eWb4FxBs7H6G | rectIWbPc9O2tn4l7 | recXp9Z7HCgZelxtx | recKhzjVck17Rc81f | recz7XZ7kOscGhL40 | recfIatNXEg1AVUTC | reciYe98cUNeMTLQ0 | recoerXl6MPMLfv9r | recMbuTdUlpUG5UTi | recm3kH9ovGHHSane | rectPUdjOP1Bn5Qwh | recJ8KnLeUj3mRfit | recDeJ3ae4uYQzMuv | recG0bZ2X30VRS5ty | recN1aPv6KU5GFy5z | rec0BeDbzR9CaFUQd | reczjDRSWNope5RaN | recMDKYXcW5s92aYS | recOTckPH1wYCWTIJ | recwFtyY3I7LzpZpN | rec3Zlv2uPDVxfzTt | reckCnKh81koapTRW | recTJqGy4UZj5h7cZ | recazmmzra80a9tER | recUpBnjChY5ZO3sR | recdTh6JSldNu2ViC | reckbZh8VUDuhe4tf | recEzwkPqFDtOmkHP | recqG0m0OgKugjcw2 | recenmybkA3rCZvnz | recVcc7hrJBmLuvfh | recHhrj8vvWNFHF63 | recTiDDssTaEfn4ZV | recDF3wMZlKyu54ZI | rec8lItQBW1xnT1vb | recTtC9TG67XRdTf3 | recLOGFz5scBXynLj | recTiRBEtPBcuGDTL | recjL6wjPxKXHPXWK | recX00yon4cbjTQki | reck6GB6qDzcUP2zP | recNkoH9M9EkbnmvU | recjVgEOQMg23wOLj | recrpI6cN0v0a3I4e | recNiKlKINWsFwhN5 | recKhMPYODUGRBDro | recphQNdMqiCwZJRA | rec61OxGwoT9nc4Qe | recY3BGpUlQIEaKRr | recQ3qVkvUs74TaXh | reccZR6zME2thmAsk | recE5R4vTJ6SfVYL3 | recp6q5z1K3AvZA9V | recrdKexrcMLcL36q | recWZM8rMKQDtq7h3 | recfTTbKiS1vXiIOT | rec5LLrc1EOOKfkcE | recsQsB9zL2XMnox3 | rect0yD9gQCDA729f | recfdjhiib507nenq | rec6yvn3iWg5JVAAM | reclLnJpFqdC4WpbV | recvcWSlm6oTxBjh2 | recFlEpUkahGWZ471 | recspz8UNlWGJj4IU | reclUFKISJzBNDRXB | recndKIQVDTgY501j | recTLUJ9rHuVj3YIP | recoqFzG1xjSK0PQ6 | rec57Kep9mzf37q5C | recHCr8UOabvf8wlS | recvTmr05mD8O6iGf | reca7DIKQeauF0OeK | recWFa9nKChFXfBbi | recaMtaYR8R01CVn1 | recnoKo3WQnEN65yt | recgy02VlIX30SYv1 | recrui9LgP17IQe0Q | recMT2AsHjCBBATvZ | recMX5qnQtcnvFLx3 | recFRsypsYpw0hTAd | recfYKlqq0iNblCju | recbidhP1scYfSgBp | recP6ilWqrcWoTyA2 | rec4CS6qjoFtDvHqE | recdat7nwsD9Xr4xY | rec4COodXlvxei3sP | recO2cKsuBMDv3lwn | recIXse0lhSDDkXn4 | rec8dR9dVQ4Dy5zht | rec7jAGTyIbIOrAFR | recRvoF8JCf6euUEg | recfSpoSRvSqF2N8b | recCWCh1YOrcBpd6A | recuvRm52e3WBrx8y | recOfkHRnRMyjFEe5 | recbV4Osa4phGswZ3 | rec5R6ftDae9DadiY | recQHwBQHb6x2xDtU | reckbiOo3NPRGUPG7 | recUL9VWccFSBT4em | recTeqN2YBIPUT9wK | rec97P3MsdlMYtw4Z | recBSk2Gc8q4zXulh]",
+            "[recAy4kB4u5Mh4G82 | recP1mgGzbUVbrIGK | recp7r6Y2EkSzel2e | recL8dZRR1lSwam4j | recc1eKOtazTRtJQG | recMbRMTJ4c7G4YyH | recC0ibJdFQa4yCOE | recLGQ1cZAVd1bo1V | recRQtj4mqpmlTaNE | recZPobZTYkeHQzfm | receBCi9D2ju3mk4P | recllNm0VhmWSwaAW]",
             "[recV3xMx4qIxC2biE | recIRWUJfazmF5uxa | recA16ORjQuS6FAlG | reczrqIbvg9klXcer | recyMAPIMHFh4CCul | recaIfwRug9sdbW8d | recOkAXXNqT3BzyGu | recj6I0qsgMk7oRaW | recvPj69Z9IkaKg3Z | recSTbRoJMUVbWiFC | recWQrpTty6MokuhG | reciUpO0HSYgA4i8l | reckOAZQ3jaRPdio1 | rec0U1FJ3e8m17qud | recrqoxbr4bFZjSmX | rec19Czxe8nyTUF9i | reccImfcS81mwoYsp | recJXH2pM5brbzNuC | recK3HzZtOOtinvOk | rec002N3ZSU6YPxjO | recYidihTTk0iW9cw | rec6OQfybgItuQGBj | recXtD4XHRvouzTeY | rectIxRp4fM5HnACL | recGXV66yPlJF5B7y | rec7EVWK8fJUtLJzR | recUarqCmPI0GmkGF | recSTURb0P7nd3SVl | recuNBFR0F7NnuPA9 | rec8PPamV0MqNrgTc | recE73VcdrJAhFg9Q | recANlmZw0TUzT2E5 | rec9tMITiNodN5rsn | recpgb0DiIFcJa7Ag | rec1HExdDU0OkCMU8 | recilJygIZG3iNLlW | recZ5hh0BuUfZftSt | recqTFOzRxCVXYRK9 | recMuxO2BGZxjC4QG | recRVSB5MftdLIil9 | recKJpSmUHHSyUNSb | rec3RhcXiBZgjUSKn | recDF0ZGU0ozJ024D | recpTX1w840N0YVhp | recCLbzI1i6q0JYBd | recsB9PwT3Dhj0lV1 | recgGxrVLscWY4kA1 | rec4r4JQxrwXMB9An | recw8Wy0Jjk2ujTDp | recJUNJmO4iZOJOR8 | rec8kwCZ8CvhW8bkG | rec2P8dZjLqjk5ohM | rec0FPxvbtK7ClLDo | recVRyCtN3W3nd5DB | recpJGxoqkLMrh4dd | rec74ZQGmWgiA2c89 | recnBgLj1jUS5gTUx | recZNhiK5tOJnu7yu | recDcHxfFq4zLu1wG | reczyMu3bcXbMVwCs | rechNVFHNAND0l6N3 | recdBT1AQWuoeEmXM | recazFKl7HLu2ODiJ | recbe8rglUoxcEmOx | recJe6F3ExhICMZYn | recQ5siLmkUvtJS3v | recV6z27kxaGVfc8F | recS0GJxuDX6LI5hf | recDcfQOj50GEpuKa | recFIpaer8D7CExm0 | reca9UaMvy7Qjlfey | rec8vfDo8aAScUWrV | recKAy7wSaUjIVUq3 | recJvnEAldlpu3VbX | recrha9NQUl1PERtp | recZju7sSZq2Threa | recc71GAfVXZawAmR | recRCCATurNol8RjQ | rect1nLKTbp2zHRtY | recNYYKChIytkKAwC | rec5uIwCKnO9Vkr2E | recNBg9dh9SB6dNV6 | recS42ITHsCS65zES | recHTGbRnDbbvgDSI | recT3o7VRsFgC14cP | recEnpEOwSGMlHLIo | rec9qxCmKeDQc8nLT | recBJ9w3WTLfGNv7W | recm9GbZ0hWhAA4RD | recTS7baBUZsL54Ba | recQ85ghPd6wgsCQV | recvUmnAtkZwVIEF6 | recKYItY8NLvWPOdg | recj6XZOllS5KtwxL | recVq4adRyk4UYRPk | recEFsWT93XVertqQ | recB6R2P8PWSQQhjR | recDMD7dMcL46mj1P | recRua8vLJdD4uzsl | recLBmBj45l05vJd2 | rect2Cp9XNmB7BCMM | recZcSf6djw2QGgkb | recAK3iHGFVKhaX1b | recUAT0A9XypykO3g | recZDvaimfGEIDGHS | recosQChyjtUewiI2 | reclspGUIynDTJI0F | recR7BSFjmzIz37Ut | recqE3R7cPGEdz2pv | reckUdr7Mk1QEGiIv | recjiCV4BcbozGntm | recyIoqcVPoD29y9l | recNN5pDoT3IWMT9M | recHVDivUrm1wXbaG | recFtFCvP9Xc9QFdX | recynuSPobvtVVoMy | recCE1M7PgaXuGDX4 | rec9edIFbeRz6go2C | recBqwbckp94OsMzX | recCzjyJMs1eY59va | recwvCcDuxPBOOuw1 | recS2lFFT3MbWcBRD | recNfxtWinTt9FjSY | recyUgIVbPryGzNw4 | recABGI3UPiiNKKYx | rec7yNr0sZpkH5XDo | rec5rXmo1sg34KXOz | recuWxOZuU9jsFLi0 | recbfAKFwHbzIHIq9 | recroimiV5EvhpYeY | rec3kB7JZwt698GDi | recjbudy5c3Mhyj4r | recvfGMHOrmvSa2Jq | recOQcA92YrRUlj7C | recd28wOp02LYOkRH | recvkH7kEXSvObfMr | recystjw4bY9Hnt1l | recpXe5m032wV2kFu | recez69TzMJgddsXg | recsp4g3FJ7pZkyDM | recuZlEBRvOnvcm4s | recrMTOo5Ku4pJe33 | rec9mu06SsnSmtWOm | recfv8gAGoxotKfCk | recfAKNbKaRaKSgKd | rechYvxaY6iQ4dT1j | recTw87ANgOTN4lpd | recVZi46ghXUBrR29 | recQLWiE13M2QpuuG | recS9zENsoiLPx1PW | recJv68PY2LqcuECz | rec3KW8BP26TS6GtJ | rec1WvgCDhMCVryWh | recHIjYsM5GOtjqI7 | recZkNeZrbAMKLadY | recYwNqoUIN41A6vG | recQoCrWkrg0ihiZ4 | recwzLw9QOTiJr7ip | rec42dKsNsTShc0dk | reciUcY3RqXAhYHqr | reckgvTXYikfaJsgi | recBgU1930cvIgPeN | recVWXirYnxKBQ1WB | rec4b1ZlfXBgF6vXO | recOSxvQWUlldKAOV | recOVaKSZKDfItdUt | recZRVn9EdowJAuhx | recplBOXpZJX1recK | recfn3QvB8gWbATgJ | recaz7NRTqBf6OgY8 | recua4dWS9mVizjPs | recJwqzSl6Uc889EU | recQBqD8AB8HZPpsP | recw66MDfXmpz9aN9 | rec5p51bBijGMhS0U | recoMkwOpbVhT8kzk | rec3jWnLWKt5znWdk | rectoTpujscDAdebS | rec1pCQo7YNRqCe65 | recXDJzYpJn4yrYw1 | recY0zRx0O5siqqUA | recGhavpxdkWqhSIc | rec0f1f2BASJ0ms21 | recFOSA69xZoUuAjS | recATgh2TLUhLjm7L | recfJ333Bqe5UZu8o | recSiXykC85OhUGNC | recmLMp7uOrt4PJma | reca3WhUoEzTNWLjF | recnKPvLtbeYWX7ya | recvGEE06ZkH4r0TS | recz2PE1lAb9P47QS | reccEyTuTz28X4FGa | recvxcZXXSOeP9leQ | recv45NiQZpplo6fR | recKZCikO1tjTW9eP | recjCxZE5wJCB51MU | recHokEpWZghyBjfN | rec43dSh70ZQOqCMI | recxQExXPWIZOFuwi | recAF0nd2f19Dzp24 | recOs0jZJpo6Pnsdk | recNWB9izRHrvHo7z | recSPuHGynUVWqH3l | recwrfwE8wQXtZMzw | recRs9qJFnTYSVQLH | recKrkcW5y9JNPxwG | rec4TqmE1L5a93Txz | recheMLcvv4YRZxEI | rectawsRTVBmxq4V6]"
           ]
         },
@@ -2261,11 +2261,11 @@
         },
         "Concluído Por": {
           "tipos": {
-            "texto": 240
+            "texto": 241
           },
-          "preenchidos": 240,
+          "preenchidos": 241,
           "total": 800,
-          "faltando": 560,
+          "faltando": 559,
           "exemplos": [
             "Kássio Fialho",
             "Kássio Fialho",
@@ -2276,11 +2276,11 @@
         },
         "Data Início Ensaio": {
           "tipos": {
-            "data(ISO)": 146
+            "data(ISO)": 147
           },
-          "preenchidos": 146,
+          "preenchidos": 147,
           "total": 800,
-          "faltando": 654,
+          "faltando": 653,
           "exemplos": [
             "2026-04-27T16:13:40.185Z",
             "2025-11-19T12:10:22.764Z",
@@ -2366,11 +2366,11 @@
         },
         "Data de Conclusão do Ensaio": {
           "tipos": {
-            "data(ISO)": 412
+            "data(ISO)": 413
           },
-          "preenchidos": 412,
+          "preenchidos": 413,
           "total": 800,
-          "faltando": 388,
+          "faltando": 387,
           "exemplos": [
             "2025-07-31T03:00:00.000Z",
             "2025-12-15T15:38:43.609Z",
@@ -2403,11 +2403,11 @@
           "total": 800,
           "faltando": 0,
           "exemplos": [
-            "332",
-            "47",
-            "171",
-            "305",
-            "47"
+            "333",
+            "48",
+            "172",
+            "306",
+            "48"
           ]
         },
         "Dias Desde a Última Atualização": {
@@ -2418,11 +2418,11 @@
           "total": 800,
           "faltando": 0,
           "exemplos": [
-            "325",
-            "47",
-            "171",
-            "305",
-            "47"
+            "326",
+            "48",
+            "172",
+            "306",
+            "48"
           ]
         },
         "Ensaios": {
@@ -2457,23 +2457,26 @@
         },
         "Fichas": {
           "tipos": {
-            "array<anexo>[6]": 1
+            "array<anexo>[6]": 2
           },
-          "preenchidos": 1,
+          "preenchidos": 2,
           "total": 800,
-          "faltando": 799,
+          "faltando": 798,
           "exemplos": [
+            "[ANEXO{nome:\"50 kPa - Adensamento - 26-6.xlsx\", tipo:\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\", url:(omitida)} | ANEXO{nome:\"50 kPa - Cisalhamento - 26-6.xlsx\", tipo:\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\", url:(omitida)} | ANEXO{nome:\"100 kPa - Adensamento - 26-6.xlsx\", tipo:\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\", url:(omitida)} | ANEXO{nome:\"100 kPa - Cisalhamento - 26-6.xlsx\", tipo:\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\", url:(omitida)} | ANEXO{nome:\"206 kPa - Adensamento - 26-6.xlsx\", tipo:\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\", url:(omitida)} | ANEXO{nome:\"206 kPa - Cisalhamento - 26-6.xlsx\", tipo:\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\", url:(omitida)}]",
             "[ANEXO{nome:\"50 kPa - Adensamento - 25-6.xlsx\", tipo:\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\", url:(omitida)} | ANEXO{nome:\"50 kPa - Cisalhamento - 25-6.xlsx\", tipo:\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\", url:(omitida)} | ANEXO{nome:\"100 kPa - Adensamento - 25-6.xlsx\", tipo:\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\", url:(omitida)} | ANEXO{nome:\"100 kPa - Cisalhamento - 25-6.xlsx\", tipo:\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\", url:(omitida)} | ANEXO{nome:\"206 kPa - Adensamento - 25-6.xlsx\", tipo:\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\", url:(omitida)} | ANEXO{nome:\"206 kPa - Cisalhamento - 25-6.xlsx\", tipo:\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\", url:(omitida)}]"
           ]
         },
         "Fotos": {
           "tipos": {
+            "array<anexo>[6]": 1,
             "array<anexo>[8]": 1
           },
-          "preenchidos": 1,
+          "preenchidos": 2,
           "total": 800,
-          "faltando": 799,
+          "faltando": 798,
           "exemplos": [
+            "[ANEXO{nome:\"TimePhoto_20260626_175528.jpg\", tipo:\"image/jpeg\", url:(omitida)} | ANEXO{nome:\"TimePhoto_20260626_142602.jpg\", tipo:\"image/jpeg\", url:(omitida)} | ANEXO{nome:\"TimePhoto_20260626_114654.jpg\", tipo:\"image/jpeg\", url:(omitida)} | ANEXO{nome:\"TimePhoto_20260626_142609.jpg\", tipo:\"image/jpeg\", url:(omitida)} | ANEXO{nome:\"TimePhoto_20260626_114700.jpg\", tipo:\"image/jpeg\", url:(omitida)} | ANEXO{nome:\"TimePhoto_20260626_175526.jpg\", tipo:\"image/jpeg\", url:(omitida)}]",
             "[ANEXO{nome:\"TimePhoto_20260625_120443.jpg\", tipo:\"image/jpeg\", url:(omitida)} | ANEXO{nome:\"TimePhoto_20260625_120456.jpg\", tipo:\"image/jpeg\", url:(omitida)} | ANEXO{nome:\"TimePhoto_20260625_171519.jpg\", tipo:\"image/jpeg\", url:(omitida)} | ANEXO{nome:\"TimePhoto_20260625_120432.jpg\", tipo:\"image/jpeg\", url:(omitida)} | ANEXO{nome:\"TimePhoto_20260625_171515.jpg\", tipo:\"image/jpeg\", url:(omitida)} | ANEXO{nome:\"TimePhoto_20260625_144801.jpg\", tipo:\"image/jpeg\", url:(omitida)} | ANEXO{nome:\"TimePhoto_20260625_171521.jpg\", tipo:\"image/jpeg\", url:(omitida)} | ANEXO{nome:\"TimePhoto_20260625_144756.jpg\", tipo:\"image/jpeg\", url:(omitida)}]"
           ]
         },
@@ -2494,11 +2497,11 @@
         },
         "Iniciado Por": {
           "tipos": {
-            "texto": 174
+            "texto": 175
           },
-          "preenchidos": 174,
+          "preenchidos": 175,
           "total": 800,
-          "faltando": 626,
+          "faltando": 625,
           "exemplos": [
             "Kássio Fialho",
             "Kássio Fialho",
