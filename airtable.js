@@ -1,25 +1,7 @@
 // airtable.js
-// Busca os trabalhos (ensaios) de um cliente no Airtable.
+
 // Filtro confiavel: o campo "ID Trabalho" comeca com "<ID Cliente>_" (ex: "GEODEEP_...").
-//
-// ====================================================================
-// CORRECOES APLICADAS (com base no diagnostico real da base — jun/2026):
-//   1) AMOSTRA: trocada a fonte de 'Nome da Amostra' (lookup, vazio em
-//      47% dos registros) para 'Link Amostras' (texto, 100% preenchido).
-//      Quando houver varias amostras, mostra a primeira + "+N".
-//   2) ENSAIO: trocada a fonte de 'Link Ensaios' (siglas cruas + lixo)
-//      para 'Nome_Completo_Ensaios' (lookup, 98% pronto e limpo).
-//      Fallback: traduz a sigla pelo mapa da tabela Ensaios; se nem isso
-//      existir e parecer um ID de trabalho vazado, marca como "lixo".
-//   3) ORDEM DE SERVICO: corrigido o campo lido na tabela OS — o nome
-//      legivel esta em 'ID' (ex.: "OS 28", "Ferrovia"), nao em 'Name'
-//      (que estava vazio em 47/48). Isolamento por cliente e nativo:
-//      a OS so aparece se estiver num trabalho que ja e do cliente.
-//   4) DATAS: leitura padronizada (todas passam por primeiro()), para
-//      tratar igual os campos que vem como array e os que vem como texto.
-//   5) ISOLAMENTO: auditado — 559/559 trabalhos da Geodeep no padrao,
-//      zero vazios, zero fora do padrao. Filtro por prefixo mantido.
-// ====================================================================
+
 require('dotenv').config();
 
 const TOKEN = process.env.AIRTABLE_TOKEN;
@@ -34,18 +16,6 @@ const TAMANHO_PAGINA = 100; // Airtable permite ate 100/pagina. 100 = 5x menos
                             // chamadas de rede que os 20 antigos => bem mais rapido.
 const MESES_RECENTE = 3;
 
-// Campo usado para ORDENAR e para definir o que e "recente".
-// Decisao: "mais recente" = a amostra que CHEGOU por ultimo ao laboratorio.
-// E uma data ESTAVEL (nunca muda depois de registrada), entao a amostra nao
-// "dança" de posicao quando a equipe atualiza algo. Casa com a intuicao do
-// cliente: "a ultima amostra que enviei aparece primeiro". 99% preenchida.
-//
-// >>> PARA TROCAR O CRITERIO DE ORDENACAO NO FUTURO, mude SO esta linha. <<<
-//     Opcoes possiveis (nomes exatos do Airtable):
-//       'Data de Chegada'                    (atual: quando a amostra chegou)
-//       'Data da Última Atualização Update'  (o que foi mexido por ultimo)
-//       'Data de Envio do Relatório'         (o que teve relatorio enviado)
-//       'Data Lançamento'                    (data de lancamento)
 const CAMPO_ORDENACAO = 'createdTime'; // meta-dado do proprio registro Airtable (ordem real de cadastro);
                                         // NAO e um campo de coluna, entao nao entra em sort da API —
                                         // ordenacao feita em memoria (ver bloco 3 abaixo).
@@ -57,8 +27,6 @@ async function airtableGet(url) {
     return dados;
 }
 
-// PATCH (escrita) — usado pela aprovacao. Ate aqui o arquivo so LIA do Airtable;
-// esta e a primeira escrita. So altera os campos passados em `fields`.
 async function airtablePatch(url, fields) {
     const resp = await fetch(url, {
         method: 'PATCH',
